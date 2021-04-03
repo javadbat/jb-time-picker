@@ -15,6 +15,11 @@
             </g>
             <g class="time-text-wrapper substitute-next-time" mask="url(#NextTimeWrapperMask)">
             </g>
+            <g class="time-indicators">
+                <use class="hour-indicator"  xlink:href="#HourSymbol" x="512" y="512"></use>
+                <use class="minute-indicator"  xlink:href="#MinuteSymbol" x="512" y="512"></use>
+                <use class="second-indicator"  xlink:href="#SecondSymbol" x="512" y="512"></use>
+            </g>
             <defs>
                 <linearGradient id="next-time-opacity-filter"  gradientTransform="rotate(90)">
                     <stop offset="0%" style="stop-color: #97999a; stop-opacity: 1.0"/>
@@ -36,6 +41,15 @@
                   <mask id="NextTimeWrapperMask">
                     <rect x="0" y="450" width="1024" height="300" fill="url(#next-time-opacity-filter)"  />
                   </mask>
+                  <g id="HourSymbol">
+                      <circle r="50" cx="0" cy="0" class="hour-symbol"></circle>
+                  </g>
+                  <g id="MinuteSymbol">
+                    <circle r="40" cx="0" cy="0" class="minute-symbol"></circle>
+                </g>
+                <g id="SecondSymbol">
+                    <circle r="30" cx="0" cy="0" class="second-symbol"></circle>
+                </g>
               </defs>
         </svg>
     </div>
