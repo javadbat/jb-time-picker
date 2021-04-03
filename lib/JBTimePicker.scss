@@ -1,0 +1,47 @@
+.jb-time-picker-web-component{
+    width: 272px;
+    height: 272px;
+    color:#97999a;
+    .svg-clock-wrapper{
+        .svg-clock{
+            width: 100%;
+            height: 100%;
+            .outer-circle{
+                fill:#f6f8f9;
+            }
+            .inner-circle{
+                fill:#fff;
+            }
+            .time-text-wrapper{
+                .time-text{
+                    font-size: 150px;
+                    text-anchor: middle;
+                    cursor: pointer;
+                    user-select: none;
+                }
+                &.current-time{
+                    .time-text{
+                        fill:#1E2832;
+                    }
+                    .seprator-text{
+                        font-size: 150px;
+                        text-anchor: middle;
+                        fill:#97999a;
+                        user-select: none;
+                    }
+                }
+                &.prev-time{
+                    .time-text{
+                        fill: #97999a;
+                    }
+                }
+                &.next-time{
+                    .time-text{
+                        fill: #97999a;
+                    }
+                }
+            }
+            
+        }
+    }
+}
