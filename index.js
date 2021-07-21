@@ -1,1 +1,1 @@
-import './dist/JBTimePicker';
+import './dist/JBTimePicker.js';
