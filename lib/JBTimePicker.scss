@@ -23,23 +23,26 @@
                     text-anchor: middle;
                     cursor: pointer;
                     user-select: none;
+                    &.--hidden {
+                        display: none;
+                    }
                 }
 
                 &.current-time {
                     .time-text {
-                        fill: #1E2832;
-
+                        fill: #1e2832;
+                        
                         &.--focused {
                             &.hour-text {
                                 fill: #2852bd;
                             }
 
                             &.minute-text {
-                                fill: #28BD48;
+                                fill: #28bd48;
                             }
 
                             &.second-text {
-                                fill: #C3FF14;
+                                fill: #c3ff14;
                             }
                         }
                     }
@@ -49,6 +52,9 @@
                         text-anchor: middle;
                         fill: #97999a;
                         user-select: none;
+                        &.--hidden {
+                            display: none;
+                        }
                     }
                 }
 
@@ -67,7 +73,7 @@
 
             .time-indicators {
                 fill: #e6e6e6;
-                
+
                 .hour-indicator {
                     display: none;
                     &.--focused {
@@ -81,21 +87,23 @@
                     stroke-width: 10px;
                     &.--focused {
                         display: initial;
-                        fill: #28BD48;
+                        fill: #28bd48;
                     }
                 }
 
                 .second-indicator {
                     display: none;
                     stroke-width: 10px;
+
                     &.--focused {
                         display: initial;
-                        fill: #C3FF14;
+                        fill: #c3ff14;
+                        &.--hidden {
+                            display: none;
+                        }
                     }
-
                 }
             }
-
         }
     }
 }

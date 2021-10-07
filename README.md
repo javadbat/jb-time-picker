@@ -55,3 +55,9 @@ document.querySelector('jb-time-picker').setTimeUnitFocus('second')
 document.querySelector('jb-time-picker').addEventListener('change', (e)=>{console.log(e.target.value)});
 
 ```
+
+### disable second
+if you want to just input minute and hour and disable second in picker and input just set `secondEnabled` to `false`
+```javascript
+    document.querySelector('jb-time-picker').secondEnabled = false;
+```
