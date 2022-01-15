@@ -1,5 +1,6 @@
 import HTML from './JBTimePicker.html';
 import CSS from './JBTimePicker.scss';
+import { AnimationHandler, DefaultPositions, GrabbedElement, JBTimeInputElements } from './Types';
 const TimeUnits = {
     hour: 'hour',
     minute: 'minute',
@@ -18,8 +19,21 @@ const ActionTypes = {
     subtrack1: 'SUB_1'
 };
 class JBTimePickerWebComponent extends HTMLElement {
+    #value = {
+        second: 0,
+        minute: 0,
+        hour: 0
+    };
+    elements!: JBTimeInputElements;
+    maxTimeUnitValues = {
+        hour: 24,
+        minute: 60,
+        second: 60
+    };
+    focusedTimeUnit: string | null = null;
+    grabbedElement: GrabbedElement | null = null;
     get value() {
-        return this._value;
+        return this.#value;
     }
     /**
      * @typedef JBTimePickerValue
@@ -57,7 +71,7 @@ class JBTimePickerWebComponent extends HTMLElement {
             this.#secondEnabled = value;
             if (value == false) {
                 this.disableSecond();
-            }else{
+            } else {
                 this.enableSecond();
             }
         }
@@ -74,59 +88,59 @@ class JBTimePickerWebComponent extends HTMLElement {
 
     }
     callOnLoadEvent() {
-        var event = new CustomEvent('load', { bubbles: true, composed: true });
+        const event = new CustomEvent('load', { bubbles: true, composed: true });
         this.dispatchEvent(event);
     }
     callOnInitEvent() {
-        var event = new CustomEvent('init', { bubbles: true, composed: true });
+        const event = new CustomEvent('init', { bubbles: true, composed: true });
         this.dispatchEvent(event);
     }
     initWebComponent() {
-        this._shadowRoot = this.attachShadow({
+        const shadowRoot = this.attachShadow({
             mode: 'open'
         });
         const html = `<style>${CSS}</style>` + '\n' + HTML;
         const element = document.createElement('template');
         element.innerHTML = html;
-        this.shadowRoot.appendChild(element.content.cloneNode(true));
+        shadowRoot.appendChild(element.content.cloneNode(true));
         this.elements = {
-            svgDOM: this.shadowRoot.querySelector('.svg-clock'),
+            svgDOM: shadowRoot.querySelector('.svg-clock')!,
             timeIndicators: {
-                hour: this.shadowRoot.querySelector('.hour-indicator'),
-                minute: this.shadowRoot.querySelector('.minute-indicator'),
-                second: this.shadowRoot.querySelector('.second-indicator')
+                hour: shadowRoot.querySelector('.hour-indicator')!,
+                minute: shadowRoot.querySelector('.minute-indicator')!,
+                second: shadowRoot.querySelector('.second-indicator')!
             },
             substitutePrevTime: {
-                wrapper: this.shadowRoot.querySelector('.substitute-prev-time'),
+                wrapper: shadowRoot.querySelector('.substitute-prev-time')!,
                 hour: null,
                 minute: null,
                 second: null,
             },
             prevTime: {
-                wrapper: this.shadowRoot.querySelector('.prev-time'),
+                wrapper: shadowRoot.querySelector('.prev-time')!,
                 hour: null,
                 minute: null,
                 second: null,
             },
             currentTime: {
-                wrapper: this.shadowRoot.querySelector('.current-time'),
+                wrapper: shadowRoot.querySelector('.current-time')!,
                 hour: null,
                 minute: null,
                 second: null,
             },
             nextTime: {
-                wrapper: this.shadowRoot.querySelector('.next-time'),
+                wrapper: shadowRoot.querySelector('.next-time')!,
                 hour: null,
                 minute: null,
                 second: null,
             },
             substituteNextTime: {
-                wrapper: this.shadowRoot.querySelector('.substitute-next-time'),
+                wrapper: shadowRoot.querySelector('.substitute-next-time')!,
                 hour: null,
                 minute: null,
                 second: null,
             },
-            sepratorTexts: this.shadowRoot.querySelectorAll('.seprator-text')
+            sepratorTexts: shadowRoot.querySelectorAll('.seprator-text')!
         };
 
         this.registerEventListener();
@@ -148,9 +162,9 @@ class JBTimePickerWebComponent extends HTMLElement {
         //                                          14:41:50  
         const currentHour = this.getValidValue(this.value.hour, TimeUnits.hour);
         const currentMinute = this.getValidValue(this.value.minute, TimeUnits.minute);
-        const currentSecond = this.getValidValue(this.value.second);
+        const currentSecond = this.getValidValue(this.value.second, TimeUnits.second);
         // substitute prev
-        const substitutePrevTimeWrapper = this.shadowRoot.querySelector('.substitute-prev-time');
+        const substitutePrevTimeWrapper = this.shadowRoot!.querySelector('.substitute-prev-time')!;
         //remove old element if exist becuase we want fresh start in this function
         if (this.elements.substitutePrevTime.hour) {
             this.elements.substitutePrevTime.hour.remove();
@@ -165,10 +179,11 @@ class JBTimePickerWebComponent extends HTMLElement {
             this.elements.substitutePrevTime.second = null;
         }
         if (currentHour > 1) {
-            if (this.elements.substitutePrevTime.hour) {
-                this.elements.substitutePrevTime.hour.remove();
-                this.elements.substitutePrevTime.hour = null;
-            }
+            //in above code it remove i just keep this code for a whaile to make sure nothing happen
+            // if (this.elements.substitutePrevTime.hour) {
+            //     this.elements.substitutePrevTime.hour.remove();
+            //     this.elements.substitutePrevTime.hour = null;
+            // }
             const substitutePrevTimeHour = this.createTimeTextDOM(TimeUnits.hour, TimeSteps.substitudePrev, currentHour - 2);
             substitutePrevTimeWrapper.append(substitutePrevTimeHour);
             this.elements.substitutePrevTime.hour = substitutePrevTimeHour;
@@ -184,7 +199,7 @@ class JBTimePickerWebComponent extends HTMLElement {
             this.elements.substitutePrevTime.second = substitutePrevTimeSecond;
         }
         //prev
-        const prevTimeWrapper = this.shadowRoot.querySelector('.prev-time');
+        const prevTimeWrapper = this.shadowRoot!.querySelector('.prev-time')!;
         //remove old element if exist becuase we want fresh start in this function
         if (this.elements.prevTime.hour) {
             this.elements.prevTime.hour.remove();
@@ -233,7 +248,7 @@ class JBTimePickerWebComponent extends HTMLElement {
             this.elements.currentTime.second.remove();
             this.elements.currentTime.second = null;
         }
-        const currentTimeWrapper = this.shadowRoot.querySelector('.current-time');
+        const currentTimeWrapper = this.shadowRoot!.querySelector('.current-time')!;
         currentTimeWrapper.append(currentTimeHour, currentTimeMinute);
         if (this.secondEnabled) {
             const currentTimeSecond = this.createTimeTextDOM(TimeUnits.second, TimeSteps.current, currentSecond);
@@ -241,7 +256,7 @@ class JBTimePickerWebComponent extends HTMLElement {
             currentTimeWrapper.append(currentTimeSecond);
         }
         //next
-        const nextTimeWrapper = this.shadowRoot.querySelector('.next-time');
+        const nextTimeWrapper = this.shadowRoot!.querySelector('.next-time')!;
         //remove old element if exist becuase we want fresh start in this function
         if (this.elements.nextTime.hour) {
             this.elements.nextTime.hour.remove();
@@ -271,7 +286,7 @@ class JBTimePickerWebComponent extends HTMLElement {
             this.elements.nextTime.second = nextTimeSecond;
         }
         // substitute next
-        const substituteNextTimeWrapper = this.shadowRoot.querySelector('.substitute-next-time');
+        const substituteNextTimeWrapper = this.shadowRoot!.querySelector('.substitute-next-time')!;
         //remove old element if exist becuase we want fresh start in this function
         if (this.elements.substituteNextTime.hour) {
             this.elements.substituteNextTime.hour.remove();
@@ -316,9 +331,9 @@ class JBTimePickerWebComponent extends HTMLElement {
 
     }
     registerEventListener() {
-        this.shadowRoot.addEventListener('mousemove', this.onMouseMove.bind(this));
-        this.elements.svgDOM.addEventListener('touchmove', this.onTouchMove.bind(this));
-        this.shadowRoot.addEventListener('mouseup', this.handleTextMouseUp.bind(this));
+        this.shadowRoot!.addEventListener('mousemove', (e) => { this.onMouseMove(e as MouseEvent); });
+        this.elements.svgDOM.addEventListener('touchmove', (e) => { this.onTouchMove(e); });
+        this.shadowRoot!.addEventListener('mouseup', this.handleTextMouseUp.bind(this));
         this.elements.svgDOM.addEventListener('touchend', this.handleTextMouseUp.bind(this));
     }
     attachMouseDownEventToTimeTextDOM(timeUnit, timeStep) {
@@ -344,7 +359,7 @@ class JBTimePickerWebComponent extends HTMLElement {
     get timeTextXPositions() {
         let hourX = 212;
         let minuteX = 512;
-        let secondX = 812;
+        const secondX = 812;
         if (!this.secondEnabled) {
             hourX = 512 - 150;
             minuteX = 512 + 150;
@@ -358,21 +373,16 @@ class JBTimePickerWebComponent extends HTMLElement {
             return [512];
         }
     }
-    #secondEnabled
+    #secondEnabled = true;
+    defaultPositions!: DefaultPositions;
+    animationHandler!: AnimationHandler
     initProp() {
         /**
         * keep vlaue of time picker
         * @private
         * @memberof JBTimePickerWebComponent
         */
-        this._value = {
-            second: 0,
-            minute: 0,
-            hour: 0
-        };
-        this.#secondEnabled = true;
-        this.focusedTimeUnit = null;
-        this.grabbedElement = null;
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const self = this;
         this.defaultPositions = {
             //
@@ -381,9 +391,9 @@ class JBTimePickerWebComponent extends HTMLElement {
             currentTimeTextY: 512,
             nextTimeTextY: 662,
             substituteNextTimeTextY: 812,
-            get hourTextX(){return self.timeTextXPositions.hourX;},
-            get minuteTextX(){return self.timeTextXPositions.minuteX;},
-            get secondTextX(){return self.timeTextXPositions.secondX;},
+            get hourTextX() { return self.timeTextXPositions.hourX; },
+            get minuteTextX() { return self.timeTextXPositions.minuteX; },
+            get secondTextX() { return self.timeTextXPositions.secondX; },
             //y diffrent between two time step
             timeStepYDiff: 150,
             //zarib tabdil dom pos -> svg pos
@@ -393,13 +403,19 @@ class JBTimePickerWebComponent extends HTMLElement {
         //its defined as a getter function becuase it must be live and cant be stored becuase sometimes component created in js env not document or it created in hidden div or even user zoomin and zoomout page
         // and all this action make scale wrong or undifiend so we must get it evry time we need it
         Object.defineProperty(this.defaultPositions, 'svgPosScale', {
-            get: () => { return this.elements.timeIndicators.hour.getCTM().inverse().a; }
+            get: () => {
+                if (this.elements.timeIndicators && this.elements.timeIndicators.hour) {
+                    const ctm = this.elements.timeIndicators.hour.getCTM();
+                    if(ctm && typeof ctm.inverse == "function"){
+                        return ctm.inverse().a;
+                    }else{
+                        return 1;
+                    }
+                }else{
+                    return 1;
+                }
+            }
         });
-        this.maxTimeUnitValues = {
-            hour: 24,
-            minute: 60,
-            second: 60
-        };
         /*
         this object define to handle events on animation playing.
         forexample when minute value set from outside to 10 and before animation finished minute set to 30 we can handle it by set waitingAction to  serhour to 30 and when last animation iteration finished we start palying animation for 30
@@ -426,18 +442,18 @@ class JBTimePickerWebComponent extends HTMLElement {
     static get observedAttributes() {
         return [];
     }
-    attributeChangedCallback(name, oldValue, newValue) {
+    attributeChangedCallback(name: string, oldValue: string, newValue: string) {
         // do something when an attribute has changed
         this.onAttributeChange(name, newValue);
     }
-    onAttributeChange(name, value) {
+    onAttributeChange(name: string, value: string) {
         // switch (name) {
         //     // case 'name':
         //     //     break;
         // }
 
     }
-    handleTextClick(timeUnit, timeStep) {
+    handleTextClick(timeUnit: string, timeStep: string) {
         //in mouse up we check if user not dragged anything call click by ourself
         if (timeStep == TimeSteps.prev || timeStep == TimeSteps.next) {
             const value = this.elements[timeStep][timeUnit].innerHTML;
@@ -451,11 +467,11 @@ class JBTimePickerWebComponent extends HTMLElement {
      * @param {string} timeUnit 
      * @param {string} timeStep 
      */
-    onTextTouchStart(e, timeUnit, timeStep) {
+    onTextTouchStart(e: TouchEvent, timeUnit: string, timeStep: string) {
         const currentYPos = e.touches[0].pageY;
         this.handleTextMouseDown(currentYPos, timeUnit, timeStep);
     }
-    onTextMouseDown(e, timeUnit, timeStep){
+    onTextMouseDown(e: MouseEvent, timeUnit: string, timeStep: string) {
         const currentYPos = e.pageY;
         this.handleTextMouseDown(currentYPos, timeUnit, timeStep);
     }
@@ -466,7 +482,7 @@ class JBTimePickerWebComponent extends HTMLElement {
      * @param {String} timeStep 
      */
     handleTextMouseDown(currentYPos, timeUnit, timeStep) {
-        
+
         const grabbedElement = this.elements.prevTime[timeUnit];
         this.grabbedElement = {
             dom: grabbedElement,
@@ -496,7 +512,7 @@ class JBTimePickerWebComponent extends HTMLElement {
                 //این آرایه فقط وقتی مهمه که حرکت کاربر در یک جهت باشه که ما بتونیم شتاب یک حرکت کاربر رو محاسبه کنیم و اگه موس کاربر تغییر جهت بده از نظر ما حرکت جدیدی شروع شده
                 inDirectionMoveStack: [0],
                 // in touch mode we cant have e.movementY so we use this stack to store it and calc moveY on touch move
-                prevTouchYPos:null,
+                prevTouchYPos: null,
                 //1 for down move -1 for up move
                 direction: 0,
                 //firstmove time
@@ -518,7 +534,7 @@ class JBTimePickerWebComponent extends HTMLElement {
         };
         this.setTimeUnitFocus(timeUnit);
     }
-    onMouseMove(e){
+    onMouseMove(e: MouseEvent) {
         const currentYPos = e.pageY;
         const movementY = e.movementY;
         this.handleTextDrag(currentYPos, movementY);
@@ -527,10 +543,10 @@ class JBTimePickerWebComponent extends HTMLElement {
      * 
      * @param {TouchEvent} e 
      */
-    onTouchMove(e){
-        if(this.grabbedElement){
+    onTouchMove(e: TouchEvent) {
+        if (this.grabbedElement) {
             const currentYPos = e.touches[0].pageY;
-            const prevTouchYPos = this.grabbedElement.acc.prevTouchYPos? this.grabbedElement.acc.prevTouchYPos : this.grabbedElement.startY;
+            const prevTouchYPos = this.grabbedElement.acc.prevTouchYPos ? this.grabbedElement.acc.prevTouchYPos : this.grabbedElement.startY;
             //update prev y for next move
             this.grabbedElement.acc.prevTouchYPos = currentYPos;
             const movementY = currentYPos - prevTouchYPos;
@@ -544,7 +560,7 @@ class JBTimePickerWebComponent extends HTMLElement {
      * @param {Number} currentYPos finger or mouse current position on screen in y axis
      * @param {Number} movementY //finger or mouse movement on screen in y axis
      */
-    handleTextDrag(currentYPos, movementY) {
+    handleTextDrag(currentYPos: number, movementY: number) {
         if (this.grabbedElement) {
             this.grabbedElement.isDragged = true;
             //how much y change is important to us to change position of element
@@ -556,17 +572,17 @@ class JBTimePickerWebComponent extends HTMLElement {
             let action = ActionTypes.move;//default is just move items
             if ((this.grabbedElement.itrationDone == 0 || this.grabbedElement.lastLogicalAction == ActionTypes.add1) && svgYDiff > sensetiveDiffValue) {
                 //if prev value was valid we let user substrack
-                if (this._value[this.grabbedElement.timeUnit] > 0) {
+                if (this.#value[this.grabbedElement.timeUnit] > 0) {
                     action = ActionTypes.subtrack1;
                 }
             }
             if ((this.grabbedElement.itrationDone == 0 || this.grabbedElement.lastLogicalAction == ActionTypes.subtrack1) && svgYDiff < (-1 * sensetiveDiffValue)) {
-                if (this._value[this.grabbedElement.timeUnit] < this.maxTimeUnitValues[this.grabbedElement.timeUnit]) {
+                if (this.#value[this.grabbedElement.timeUnit] < this.maxTimeUnitValues[this.grabbedElement.timeUnit]) {
                     action = ActionTypes.add1;
                 }
             }
             if (action == ActionTypes.subtrack1) {
-                this._value[this.grabbedElement.timeUnit] = this._value[this.grabbedElement.timeUnit] - 1;
+                this.#value[this.grabbedElement.timeUnit] = this.#value[this.grabbedElement.timeUnit] - 1;
                 this.triggerOnChangeEvent();
                 //in this case we try to decrease grabbed time by 1 so we keep track of it.
                 this.grabbedElement.itrationDone += 1;
@@ -577,10 +593,10 @@ class JBTimePickerWebComponent extends HTMLElement {
                 this.grabbedElement.timeStep = this.grabbedElement.timeStep == TimeSteps.current ? TimeSteps.next : TimeSteps.current;
 
                 //
-                this.onTimeTextChange(this.grabbedElement.timeUnit, this._value[this.grabbedElement.timeUnit]);
+                this.onTimeTextChange(this.grabbedElement.timeUnit, this.#value[this.grabbedElement.timeUnit]);
             } else if (action == ActionTypes.add1) {
                 // we add value first
-                this._value[this.grabbedElement.timeUnit] = this._value[this.grabbedElement.timeUnit] + 1;
+                this.#value[this.grabbedElement.timeUnit] = this.#value[this.grabbedElement.timeUnit] + 1;
                 this.triggerOnChangeEvent();
                 //user scroll up and want to add to time unit
                 //in this case we try to increase grabbed time by 1 so we keep track of it.
@@ -591,7 +607,7 @@ class JBTimePickerWebComponent extends HTMLElement {
                 //update  grabbed time step after swap changeing done
                 this.grabbedElement.timeStep = this.grabbedElement.timeStep == TimeSteps.current ? TimeSteps.prev : TimeSteps.current;
                 //
-                this.onTimeTextChange(this.grabbedElement.timeUnit, this._value[this.grabbedElement.timeUnit]);
+                this.onTimeTextChange(this.grabbedElement.timeUnit, this.#value[this.grabbedElement.timeUnit]);
 
             } else {
                 if (this.elements.substitutePrevTime[this.grabbedElement.timeUnit]) {
@@ -615,7 +631,7 @@ class JBTimePickerWebComponent extends HTMLElement {
         }
 
     }
-    subtrackTimeTextUnitDomOperation(timeUnit, svgYDiff) {
+    subtrackTimeTextUnitDomOperation(timeUnit: string, svgYDiff: number) {
         //when we subtrack the value and we want all  swap dom place job be done
         //remember allways update this._value befor call this function
         //remove old next substitude dom becuse it will replaced
@@ -630,15 +646,15 @@ class JBTimePickerWebComponent extends HTMLElement {
         this.changeTimeTextParent(timeUnit, TimeSteps.prev, TimeSteps.current, svgYDiff);
         this.changeTimeTextParent(timeUnit, TimeSteps.substitudePrev, TimeSteps.prev, svgYDiff);
         // add new prev substitude element
-        if (this._value[timeUnit] > 1) {
-            const prevSubstituteValue = this._value[timeUnit] - 2;
+        if (this.#value[timeUnit] > 1) {
+            const prevSubstituteValue = this.#value[timeUnit] - 2;
             const newSubstitudePrev = this.createTimeTextDOM(timeUnit, TimeSteps.substitudePrev, prevSubstituteValue);
             this.elements.substitutePrevTime.wrapper.appendChild(newSubstitudePrev);
             this.elements.substitutePrevTime[timeUnit] = newSubstitudePrev;
         }
 
     }
-    addTimeTextUnitDomOperation(timeUnit, svgYDiff) {
+    addTimeTextUnitDomOperation(timeUnit: string, svgYDiff: number) {
         //when we add to the value and we want all  swap dom place job be done
         //remember allways update this._value befor call this function
         //remove old prev substitude dom because it will replaced
@@ -654,8 +670,8 @@ class JBTimePickerWebComponent extends HTMLElement {
         this.changeTimeTextParent(timeUnit, TimeSteps.substitudeNext, TimeSteps.next, svgYDiff);
 
         // add new prev substitude element
-        if (this._value[timeUnit] + 1 < this.maxTimeUnitValues[timeUnit]) {
-            const nextSubstituteValue = this._value[timeUnit] + 2;
+        if (this.#value[timeUnit] + 1 < this.maxTimeUnitValues[timeUnit]) {
+            const nextSubstituteValue = this.#value[timeUnit] + 2;
             const newSubstitudeNext = this.createTimeTextDOM(timeUnit, TimeSteps.substitudeNext, nextSubstituteValue);
             this.elements.substituteNextTime.wrapper.appendChild(newSubstitudeNext);
             this.elements.substituteNextTime[timeUnit] = newSubstitudeNext;
@@ -703,7 +719,7 @@ class JBTimePickerWebComponent extends HTMLElement {
         }
     }
 
-    moveBackToPos(dom) {
+    moveBackToPos(dom: SVGGElement) {
         if (dom) {
             //remove all transform and changed pos from element and returned it to natrual place. used on drop event
             dom.style.transition = `transform 0.3s 0s ease`;
@@ -713,29 +729,29 @@ class JBTimePickerWebComponent extends HTMLElement {
         }
 
     }
-    createTimeTextDOM(timeUnit, timeStep, timeValue) {
+    createTimeTextDOM(timeUnit: string, timeStep: string, timeValue: number) {
         const xmlns = "http://www.w3.org/2000/svg";
         //<text class="hour-text time-text" dominant-baseline="middle" textLength="150" y="212" x="212"></text>
-        let y = this.defaultPositions[timeStep + 'TextY'];
-        let x = this.defaultPositions[timeUnit + 'TextX'];
+        const y = this.defaultPositions[timeStep + 'TextY'];
+        const x = this.defaultPositions[timeUnit + 'TextX'];
         const textElem = document.createElementNS(xmlns, 'text');
         textElem.classList.add(`${timeUnit}-text`, 'time-text');
         textElem.setAttributeNS(null, 'dominant-baseline', 'middle');
         textElem.setAttributeNS(null, 'textLength', '150');
         textElem.setAttributeNS(null, 'y', y);
         textElem.setAttributeNS(null, 'x', x);
-        textElem.innerHTML = timeValue;
+        textElem.innerHTML = timeValue.toString();
         if (this.focusedTimeUnit == timeUnit) {
             textElem.classList.add('--focused');
         }
         return textElem;
 
     }
-    onTimeTextChange(timeUnit, value) {
+    onTimeTextChange(timeUnit: string, value: number) {
         this.placeTimeUnitIndicator(timeUnit, value);
     }
 
-    placeTimeUnitIndicator(timeUnit, value) {
+    placeTimeUnitIndicator(timeUnit: string, value: number) {
         const pos = this.getUnitXYPoint(value, timeUnit);
         this.elements.timeIndicators[timeUnit].setAttribute('x', pos.x);
         this.elements.timeIndicators[timeUnit].setAttribute('y', pos.y);
@@ -757,7 +773,7 @@ class JBTimePickerWebComponent extends HTMLElement {
      * @public
      * @param {string} timeUnit 
      */
-    setTimeUnitFocus(timeUnit) {
+    setTimeUnitFocus(timeUnit: string) {
         //when user select certain unit like hour and try to change it by text wheel or indicator or something elese or even programicaly we exec this method
         if (timeUnit != this.focusedTimeUnit) {
             const oldFocusedTimeUnit = this.focusedTimeUnit;
@@ -806,23 +822,25 @@ class JBTimePickerWebComponent extends HTMLElement {
      * @private
      */
     handleUserBigSwipe() {
-
-        const movementSum = this.grabbedElement.acc.inDirectionMoveStack.reduce((a, b) => { return a + b; });
-        const vectorScaleMovementSum = this.defaultPositions.svgPosScale * movementSum;
-        const swipeDuration = performance.now() - this.grabbedElement.acc.t;
-        const acceleration = movementSum / swipeDuration;
-        //console.table({movementSum,vectorScaleMovementSum,swipeDuration,acceleration});
-        //how much user must move mouse so we start adding multiple value with animation
-        const sensetiveYDiffPoint = 200;
-        if (Math.abs(vectorScaleMovementSum) > sensetiveYDiffPoint) {
-            //TODO: its better to be a combination of acceleration and vectorScaleMovementSum but im bad at physic so i make it simple
-            const neededItration = Math.round(Math.abs(acceleration * 10));
-            const timeUnit = this.grabbedElement.timeUnit;
-            //this.grabbedElement.acc.direction is -1 for add and 1 for sub so we *-1 it 
-            const newValue = (this.grabbedElement.acc.direction * -1 * neededItration) + this.value[timeUnit];
-            const validNewValue = this.getValidValue(newValue, timeUnit);
-            this.updateValue(validNewValue, timeUnit);
+        if(this.grabbedElement){
+            const movementSum = this.grabbedElement.acc.inDirectionMoveStack.reduce((a, b) => { return a + b; });
+            const vectorScaleMovementSum = this.defaultPositions.svgPosScale * movementSum;
+            const swipeDuration = performance.now() - this.grabbedElement.acc.t;
+            const acceleration = movementSum / swipeDuration;
+            //console.table({movementSum,vectorScaleMovementSum,swipeDuration,acceleration});
+            //how much user must move mouse so we start adding multiple value with animation
+            const sensetiveYDiffPoint = 200;
+            if (Math.abs(vectorScaleMovementSum) > sensetiveYDiffPoint) {
+                //TODO: its better to be a combination of acceleration and vectorScaleMovementSum but im bad at physic so i make it simple
+                const neededItration = Math.round(Math.abs(acceleration * 10));
+                const timeUnit = this.grabbedElement.timeUnit;
+                //this.grabbedElement.acc.direction is -1 for add and 1 for sub so we *-1 it 
+                const newValue = (this.grabbedElement.acc.direction * -1 * neededItration) + this.value[timeUnit];
+                const validNewValue = this.getValidValue(newValue, timeUnit);
+                this.updateValue(validNewValue, timeUnit);
+            }
         }
+
     }
     /**
      * @private
@@ -830,7 +848,7 @@ class JBTimePickerWebComponent extends HTMLElement {
      * @param {string} timeUnit hour minute or second
      * @param {boolean} canTriggerOnChange when this method called in response of outside value update we dont call onChange so this flag will be false in that situation or other time we dont want to trigger change event
      */
-    updateValue(value, timeUnit, canTriggerOnChange = true) {
+    updateValue(value: number, timeUnit: string, canTriggerOnChange = true) {
         //how many itration we need to get to the right point in value
         const timeDistance = value - this.value[timeUnit];
         if (timeDistance == 0) {
@@ -845,7 +863,7 @@ class JBTimePickerWebComponent extends HTMLElement {
                 if (!isOnFinishedExecuted) {
                     this.animationHandler[timeUnit].isTextAnimationPlaying = false;
                     isOnFinishedExecuted = true;
-                    this._value[timeUnit] = this._value[timeUnit] + direction;
+                    this.#value[timeUnit] = this.#value[timeUnit] + direction;
                     if (canTriggerOnChange) {
                         this.triggerOnChangeEvent();
                     }
@@ -900,7 +918,7 @@ class JBTimePickerWebComponent extends HTMLElement {
      * @param {Number} animationDuration how many milisecond animation take
      * @param {string} animationEasing optional and determine animation ease param
      */
-    playTextNodeAnimation(timeUnit, timeStep, diraction, onFinish, animationDuration = 100, animationEasing = "linear") {
+    playTextNodeAnimation(timeUnit: string, timeStep: string, diraction: number, onFinish: () => void, animationDuration = 100, animationEasing = "linear") {
         //for mor code readabilityy we set direction in meaning way 
         const itrationHeight = -1 * diraction * this.defaultPositions.timeStepYDiff;
         const animationId = `${Math.random()}-animation`;
@@ -978,9 +996,9 @@ class JBTimePickerWebComponent extends HTMLElement {
         this.initSeprators();
     }
     initSeprators() {
-        this.elements.sepratorTexts[0].setAttribute('x', this.sepratorsXPosition[0]);
+        this.elements.sepratorTexts[0].setAttribute('x', this.sepratorsXPosition[0].toString());
         if (this.secondEnabled) {
-            this.elements.sepratorTexts[1].setAttribute('x', this.sepratorsXPosition[1]);
+            this.elements.sepratorTexts[1].setAttribute('x', this.sepratorsXPosition[1].toString());
             this.elements.sepratorTexts[1].classList.remove('--hidden');
         } else {
             this.elements.sepratorTexts[1].classList.add('--hidden');
