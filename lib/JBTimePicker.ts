@@ -1,6 +1,6 @@
 import HTML from './JBTimePicker.html';
 import CSS from './JBTimePicker.scss';
-import { AnimationHandler, DefaultPositions, GrabbedElement, JBTimeInputElements } from './Types';
+import { AnimationHandler, DefaultPositions, GrabbedElement, JBTimeInputElements, JBTimePickerValueObject } from './Types';
 const TimeUnits = {
     hour: 'hour',
     minute: 'minute',
@@ -18,8 +18,8 @@ const ActionTypes = {
     add1: 'ADD_1',
     subtrack1: 'SUB_1'
 };
-class JBTimePickerWebComponent extends HTMLElement {
-    #value = {
+export class JBTimePickerWebComponent extends HTMLElement {
+    #value:JBTimePickerValueObject = {
         second: 0,
         minute: 0,
         hour: 0
@@ -57,11 +57,14 @@ class JBTimePickerWebComponent extends HTMLElement {
         else {
             this.animationHandler.minute.waitingAction = () => { this.updateValue(value.minute, TimeUnits.minute, false); };
         }
-        if (!this.animationHandler.second.isTextAnimationPlaying) {
-            this.updateValue(value.second, TimeUnits.second, false);
-        } else {
-            this.animationHandler.second.waitingAction = () => { this.updateValue(value.second, TimeUnits.second, false); };
+        if(value.second){
+            if (!this.animationHandler.second.isTextAnimationPlaying) {
+                this.updateValue(value.second, TimeUnits.second, false);
+            } else {
+                this.animationHandler.second.waitingAction = () => { this.updateValue(value.second!, TimeUnits.second, false); };
+            }
         }
+        
     }
     get secondEnabled() {
         return this.#secondEnabled;
@@ -148,7 +151,7 @@ class JBTimePickerWebComponent extends HTMLElement {
     initTimeUnitIndicator() {
         this.placeTimeUnitIndicator(TimeUnits.hour, this.value.hour);
         this.placeTimeUnitIndicator(TimeUnits.minute, this.value.minute);
-        if (this.secondEnabled) {
+        if (this.secondEnabled && this.value.second) {
             this.placeTimeUnitIndicator(TimeUnits.second, this.value.second);
         }
     }

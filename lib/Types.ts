@@ -80,3 +80,9 @@ export type GrabbedElement = {
         captureMove: (movementY:number)=>void;
     }
 }
+export type JBTimePickerValueObject = {
+    hour:number;
+    minute:number;
+    second?:number;
+}
+export type SecondRange = [null| number, null| number];
