@@ -61,3 +61,8 @@ if you want to just input minute and hour and disable second in picker and input
 ```javascript
     document.querySelector('jb-time-picker').secondEnabled = false;
 ```
+### frontal zero
+if you want picker to show `02` instead of `2` when number is less than 10 just set `frontalZero` of timepicker default is `false`.    
+```js
+document.querySelector('jb-time-picker').frontalZero = true;
+```

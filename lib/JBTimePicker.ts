@@ -32,6 +32,8 @@ export class JBTimePickerWebComponent extends HTMLElement {
     };
     focusedTimeUnit: string | null = null;
     grabbedElement: GrabbedElement | null = null;
+    // to show 01 instead of 1 in picker
+    frontalZero = false;
     get value() {
         return this.#value;
     }
@@ -181,6 +183,7 @@ export class JBTimePickerWebComponent extends HTMLElement {
             this.elements.substitutePrevTime.second.remove();
             this.elements.substitutePrevTime.second = null;
         }
+        //
         if (currentHour > 1) {
             //in above code it remove i just keep this code for a whaile to make sure nothing happen
             // if (this.elements.substitutePrevTime.hour) {
@@ -743,7 +746,13 @@ export class JBTimePickerWebComponent extends HTMLElement {
         textElem.setAttributeNS(null, 'textLength', '150');
         textElem.setAttributeNS(null, 'y', y);
         textElem.setAttributeNS(null, 'x', x);
-        textElem.innerHTML = timeValue.toString();
+        // turn 2 to 02 if configged by user
+        let valueString = timeValue.toString();
+        if(this.frontalZero && timeValue<10){
+            valueString = '0'+valueString;
+        }
+        textElem.innerHTML = valueString;
+        //
         if (this.focusedTimeUnit == timeUnit) {
             textElem.classList.add('--focused');
         }
