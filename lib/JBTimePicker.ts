@@ -1,7 +1,7 @@
 import HTML from './JBTimePicker.html';
 import CSS from './JBTimePicker.scss';
-import { AnimationHandler, DefaultPositions, GrabbedElement, JBTimeInputElements, JBTimePickerValueObject } from './Types';
-const TimeUnits = {
+import { AnimationHandler, DefaultPositions, GrabbedElement, JBTimeInputElements, JBTimePickerValueObject, TimeUnitsObject, TimeUnitsString } from './Types';
+const TimeUnits: TimeUnitsObject = {
     hour: 'hour',
     minute: 'minute',
     second: 'second'
@@ -19,7 +19,7 @@ const ActionTypes = {
     subtrack1: 'SUB_1'
 };
 export class JBTimePickerWebComponent extends HTMLElement {
-    #value:JBTimePickerValueObject = {
+    #value: JBTimePickerValueObject = {
         second: 0,
         minute: 0,
         hour: 0
@@ -34,6 +34,19 @@ export class JBTimePickerWebComponent extends HTMLElement {
     grabbedElement: GrabbedElement | null = null;
     // to show 01 instead of 1 in picker
     frontalZero = false;
+    // user want to greyout some unit becuase they are optional
+    set optionalUnits(value: TimeUnitsString[]) {
+        this.#optionalUnits = value;
+        value.forEach((v) => {
+            this.elements.currentTime[v]?.classList.add('--optional');
+            this.elements.nextTime[v]?.classList.add('--optional');
+            this.elements.prevTime[v]?.classList.add('--optional');
+        });
+    }
+    get optionalUnits() {
+        return this.#optionalUnits;
+    }
+    #optionalUnits: TimeUnitsString[] = [];
     get value() {
         return this.#value;
     }
@@ -47,7 +60,7 @@ export class JBTimePickerWebComponent extends HTMLElement {
      * @param {JBTimePickerValue} value 
      * @memberof JBTimePickerWebComponent
      */
-    set value(value) {
+    set value(value: JBTimePickerValueObject) {
         if (!this.animationHandler.hour.isTextAnimationPlaying) {
             this.updateValue(value.hour, TimeUnits.hour, false);
         } else {
@@ -59,14 +72,14 @@ export class JBTimePickerWebComponent extends HTMLElement {
         else {
             this.animationHandler.minute.waitingAction = () => { this.updateValue(value.minute, TimeUnits.minute, false); };
         }
-        if(value.second){
+        if (value.second) {
             if (!this.animationHandler.second.isTextAnimationPlaying) {
                 this.updateValue(value.second, TimeUnits.second, false);
             } else {
                 this.animationHandler.second.waitingAction = () => { this.updateValue(value.second!, TimeUnits.second, false); };
             }
         }
-        
+
     }
     get secondEnabled() {
         return this.#secondEnabled;
@@ -412,12 +425,12 @@ export class JBTimePickerWebComponent extends HTMLElement {
             get: () => {
                 if (this.elements.timeIndicators && this.elements.timeIndicators.hour) {
                     const ctm = this.elements.timeIndicators.hour.getCTM();
-                    if(ctm && typeof ctm.inverse == "function"){
+                    if (ctm && typeof ctm.inverse == "function") {
                         return ctm.inverse().a;
-                    }else{
+                    } else {
                         return 1;
                     }
-                }else{
+                } else {
                     return 1;
                 }
             }
@@ -459,7 +472,7 @@ export class JBTimePickerWebComponent extends HTMLElement {
         // }
 
     }
-    handleTextClick(timeUnit: string, timeStep: string) {
+    handleTextClick(timeUnit: TimeUnitsString, timeStep: string) {
         //in mouse up we check if user not dragged anything call click by ourself
         if (timeStep == TimeSteps.prev || timeStep == TimeSteps.next) {
             const value = this.elements[timeStep][timeUnit].innerHTML;
@@ -578,17 +591,17 @@ export class JBTimePickerWebComponent extends HTMLElement {
             let action = ActionTypes.move;//default is just move items
             if ((this.grabbedElement.itrationDone == 0 || this.grabbedElement.lastLogicalAction == ActionTypes.add1) && svgYDiff > sensetiveDiffValue) {
                 //if prev value was valid we let user substrack
-                if (this.#value[this.grabbedElement.timeUnit] > 0) {
+                if (this.#value[this.grabbedElement.timeUnit]! > 0) {
                     action = ActionTypes.subtrack1;
                 }
             }
             if ((this.grabbedElement.itrationDone == 0 || this.grabbedElement.lastLogicalAction == ActionTypes.subtrack1) && svgYDiff < (-1 * sensetiveDiffValue)) {
-                if (this.#value[this.grabbedElement.timeUnit] < this.maxTimeUnitValues[this.grabbedElement.timeUnit]) {
+                if (this.#value[this.grabbedElement.timeUnit]! < this.maxTimeUnitValues[this.grabbedElement.timeUnit]) {
                     action = ActionTypes.add1;
                 }
             }
             if (action == ActionTypes.subtrack1) {
-                this.#value[this.grabbedElement.timeUnit] = this.#value[this.grabbedElement.timeUnit] - 1;
+                this.#value[this.grabbedElement.timeUnit] = this.#value[this.grabbedElement.timeUnit]! - 1;
                 this.triggerOnChangeEvent();
                 //in this case we try to decrease grabbed time by 1 so we keep track of it.
                 this.grabbedElement.itrationDone += 1;
@@ -599,10 +612,10 @@ export class JBTimePickerWebComponent extends HTMLElement {
                 this.grabbedElement.timeStep = this.grabbedElement.timeStep == TimeSteps.current ? TimeSteps.next : TimeSteps.current;
 
                 //
-                this.onTimeTextChange(this.grabbedElement.timeUnit, this.#value[this.grabbedElement.timeUnit]);
+                this.onTimeTextChange(this.grabbedElement.timeUnit, this.#value[this.grabbedElement.timeUnit]!);
             } else if (action == ActionTypes.add1) {
                 // we add value first
-                this.#value[this.grabbedElement.timeUnit] = this.#value[this.grabbedElement.timeUnit] + 1;
+                this.#value[this.grabbedElement.timeUnit] = this.#value[this.grabbedElement.timeUnit]! + 1;
                 this.triggerOnChangeEvent();
                 //user scroll up and want to add to time unit
                 //in this case we try to increase grabbed time by 1 so we keep track of it.
@@ -613,21 +626,21 @@ export class JBTimePickerWebComponent extends HTMLElement {
                 //update  grabbed time step after swap changeing done
                 this.grabbedElement.timeStep = this.grabbedElement.timeStep == TimeSteps.current ? TimeSteps.prev : TimeSteps.current;
                 //
-                this.onTimeTextChange(this.grabbedElement.timeUnit, this.#value[this.grabbedElement.timeUnit]);
+                this.onTimeTextChange(this.grabbedElement.timeUnit, this.#value[this.grabbedElement.timeUnit]!);
 
             } else {
                 if (this.elements.substitutePrevTime[this.grabbedElement.timeUnit]) {
-                    this.elements.substitutePrevTime[this.grabbedElement.timeUnit].style.transform = `translateY(${svgYDiff}px)`;
+                    this.elements.substitutePrevTime[this.grabbedElement.timeUnit]!.style.transform = `translateY(${svgYDiff}px)`;
                 }
                 if (this.elements.prevTime[this.grabbedElement.timeUnit]) {
-                    this.elements.prevTime[this.grabbedElement.timeUnit].style.transform = `translateY(${svgYDiff}px)`;
+                    this.elements.prevTime[this.grabbedElement.timeUnit]!.style.transform = `translateY(${svgYDiff}px)`;
                 }
-                this.elements.currentTime[this.grabbedElement.timeUnit].style.transform = `translateY(${svgYDiff}px)`;
+                this.elements.currentTime[this.grabbedElement.timeUnit]!.style.transform = `translateY(${svgYDiff}px)`;
                 if (this.elements.nextTime[this.grabbedElement.timeUnit]) {
-                    this.elements.nextTime[this.grabbedElement.timeUnit].style.transform = `translateY(${svgYDiff}px)`;
+                    this.elements.nextTime[this.grabbedElement.timeUnit]!.style.transform = `translateY(${svgYDiff}px)`;
                 }
                 if (this.elements.substituteNextTime[this.grabbedElement.timeUnit]) {
-                    this.elements.substituteNextTime[this.grabbedElement.timeUnit].style.transform = `translateY(${svgYDiff}px)`;
+                    this.elements.substituteNextTime[this.grabbedElement.timeUnit]!.style.transform = `translateY(${svgYDiff}px)`;
                 }
             }
             // we memorize what we do in this move event so we can use it in next move
@@ -637,7 +650,7 @@ export class JBTimePickerWebComponent extends HTMLElement {
         }
 
     }
-    subtrackTimeTextUnitDomOperation(timeUnit: string, svgYDiff: number) {
+    subtrackTimeTextUnitDomOperation(timeUnit: TimeUnitsString, svgYDiff: number) {
         //when we subtrack the value and we want all  swap dom place job be done
         //remember allways update this._value befor call this function
         //remove old next substitude dom becuse it will replaced
@@ -652,15 +665,15 @@ export class JBTimePickerWebComponent extends HTMLElement {
         this.changeTimeTextParent(timeUnit, TimeSteps.prev, TimeSteps.current, svgYDiff);
         this.changeTimeTextParent(timeUnit, TimeSteps.substitudePrev, TimeSteps.prev, svgYDiff);
         // add new prev substitude element
-        if (this.#value[timeUnit] > 1) {
-            const prevSubstituteValue = this.#value[timeUnit] - 2;
+        if (this.#value && this.#value[timeUnit]! > 1) {
+            const prevSubstituteValue = this.#value[timeUnit]! - 2;
             const newSubstitudePrev = this.createTimeTextDOM(timeUnit, TimeSteps.substitudePrev, prevSubstituteValue);
             this.elements.substitutePrevTime.wrapper.appendChild(newSubstitudePrev);
             this.elements.substitutePrevTime[timeUnit] = newSubstitudePrev;
         }
 
     }
-    addTimeTextUnitDomOperation(timeUnit: string, svgYDiff: number) {
+    addTimeTextUnitDomOperation(timeUnit: TimeUnitsString, svgYDiff: number) {
         //when we add to the value and we want all  swap dom place job be done
         //remember allways update this._value befor call this function
         //remove old prev substitude dom because it will replaced
@@ -676,8 +689,8 @@ export class JBTimePickerWebComponent extends HTMLElement {
         this.changeTimeTextParent(timeUnit, TimeSteps.substitudeNext, TimeSteps.next, svgYDiff);
 
         // add new prev substitude element
-        if (this.#value[timeUnit] + 1 < this.maxTimeUnitValues[timeUnit]) {
-            const nextSubstituteValue = this.#value[timeUnit] + 2;
+        if (this.#value[timeUnit]! + 1 < this.maxTimeUnitValues[timeUnit]) {
+            const nextSubstituteValue = this.#value[timeUnit]! + 2;
             const newSubstitudeNext = this.createTimeTextDOM(timeUnit, TimeSteps.substitudeNext, nextSubstituteValue);
             this.elements.substituteNextTime.wrapper.appendChild(newSubstitudeNext);
             this.elements.substituteNextTime[timeUnit] = newSubstitudeNext;
@@ -713,11 +726,11 @@ export class JBTimePickerWebComponent extends HTMLElement {
             this.handleUserBigSwipe();
             const timeUnit = this.grabbedElement.timeUnit;
             const timeStep = this.grabbedElement.timeStep;
-            this.moveBackToPos(this.elements.substitutePrevTime[timeUnit]);
-            this.moveBackToPos(this.elements.prevTime[timeUnit]);
-            this.moveBackToPos(this.elements.currentTime[timeUnit]);
-            this.moveBackToPos(this.elements.nextTime[timeUnit]);
-            this.moveBackToPos(this.elements.substituteNextTime[timeUnit]);
+            this.moveBackToPos(this.elements.substitutePrevTime[timeUnit]!);
+            this.moveBackToPos(this.elements.prevTime[timeUnit]!);
+            this.moveBackToPos(this.elements.currentTime[timeUnit]!);
+            this.moveBackToPos(this.elements.nextTime[timeUnit]!);
+            this.moveBackToPos(this.elements.substituteNextTime[timeUnit]!);
             if (!this.grabbedElement.isDragged) {
                 this.handleTextClick(timeUnit, timeStep);
             }
@@ -735,7 +748,7 @@ export class JBTimePickerWebComponent extends HTMLElement {
         }
 
     }
-    createTimeTextDOM(timeUnit: string, timeStep: string, timeValue: number) {
+    createTimeTextDOM(timeUnit: TimeUnitsString, timeStep: string, timeValue: number) {
         const xmlns = "http://www.w3.org/2000/svg";
         //<text class="hour-text time-text" dominant-baseline="middle" textLength="150" y="212" x="212"></text>
         const y = this.defaultPositions[timeStep + 'TextY'];
@@ -748,13 +761,16 @@ export class JBTimePickerWebComponent extends HTMLElement {
         textElem.setAttributeNS(null, 'x', x);
         // turn 2 to 02 if configged by user
         let valueString = timeValue.toString();
-        if(this.frontalZero && timeValue<10){
-            valueString = '0'+valueString;
+        if (this.frontalZero && timeValue < 10) {
+            valueString = '0' + valueString;
         }
         textElem.innerHTML = valueString;
-        //
+        //attach class
         if (this.focusedTimeUnit == timeUnit) {
             textElem.classList.add('--focused');
+        }
+        if (this.optionalUnits.includes(timeUnit)) {
+            textElem.classList.add('--optional');
         }
         return textElem;
 
@@ -834,7 +850,7 @@ export class JBTimePickerWebComponent extends HTMLElement {
      * @private
      */
     handleUserBigSwipe() {
-        if(this.grabbedElement){
+        if (this.grabbedElement) {
             const movementSum = this.grabbedElement.acc.inDirectionMoveStack.reduce((a, b) => { return a + b; });
             const vectorScaleMovementSum = this.defaultPositions.svgPosScale * movementSum;
             const swipeDuration = performance.now() - this.grabbedElement.acc.t;
@@ -847,7 +863,7 @@ export class JBTimePickerWebComponent extends HTMLElement {
                 const neededItration = Math.round(Math.abs(acceleration * 10));
                 const timeUnit = this.grabbedElement.timeUnit;
                 //this.grabbedElement.acc.direction is -1 for add and 1 for sub so we *-1 it 
-                const newValue = (this.grabbedElement.acc.direction * -1 * neededItration) + this.value[timeUnit];
+                const newValue = (this.grabbedElement.acc.direction * -1 * neededItration) + this.value[timeUnit]!;
                 const validNewValue = this.getValidValue(newValue, timeUnit);
                 this.updateValue(validNewValue, timeUnit);
             }
@@ -857,12 +873,12 @@ export class JBTimePickerWebComponent extends HTMLElement {
     /**
      * @private
      * @param {number} value new value
-     * @param {string} timeUnit hour minute or second
+     * @param {TimeUnitsString} timeUnit hour minute or second
      * @param {boolean} canTriggerOnChange when this method called in response of outside value update we dont call onChange so this flag will be false in that situation or other time we dont want to trigger change event
      */
-    updateValue(value: number, timeUnit: string, canTriggerOnChange = true) {
+    updateValue(value: number, timeUnit: TimeUnitsString, canTriggerOnChange = true) {
         //how many itration we need to get to the right point in value
-        const timeDistance = value - this.value[timeUnit];
+        const timeDistance = value - this.value[timeUnit]!;
         if (timeDistance == 0) {
             return;
         }
@@ -875,7 +891,7 @@ export class JBTimePickerWebComponent extends HTMLElement {
                 if (!isOnFinishedExecuted) {
                     this.animationHandler[timeUnit].isTextAnimationPlaying = false;
                     isOnFinishedExecuted = true;
-                    this.#value[timeUnit] = this.#value[timeUnit] + direction;
+                    this.#value[timeUnit] = this.#value[timeUnit]! + direction;
                     if (canTriggerOnChange) {
                         this.triggerOnChangeEvent();
                     }
@@ -885,9 +901,9 @@ export class JBTimePickerWebComponent extends HTMLElement {
                     if (direction == -1) {
                         this.subtrackTimeTextUnitDomOperation(timeUnit, 0);
                     }
-                    if (typeof this.animationHandler[timeUnit].waitingAction == "function") {
+                    if (typeof this.animationHandler[timeUnit].waitingAction === "function") {
                         //if new value setted and we must stop current value animation iteration and exec waiting action
-                        this.animationHandler[timeUnit].waitingAction();
+                        this.animationHandler[timeUnit].waitingAction!();
                         this.animationHandler[timeUnit].waitingAction = null;
                     } else {
                         //continue animation itration

@@ -26,6 +26,9 @@
                     &.--hidden {
                         display: none;
                     }
+                    &.--optional{
+                        opacity: 0.6;
+                    }
                 }
 
                 &.current-time {

@@ -66,3 +66,8 @@ if you want picker to show `02` instead of `2` when number is less than 10 just 
 ```js
 document.querySelector('jb-time-picker').frontalZero = true;
 ```
+### optional units
+if you want to tell user some units is optional and greyout the numbers in picker you can set `optionalUnits`
+```js
+document.querySelector('jb-time-picker').optionalUnits = [hour];
+```

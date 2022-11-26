@@ -57,13 +57,11 @@ type AnimationHandlerPerUnit = {
     waitingAction: (()=>void) | null,
 }
 export type AnimationHandler = {
-    hour: AnimationHandlerPerUnit ;
-    minute: AnimationHandlerPerUnit;
-    second: AnimationHandlerPerUnit;
+    [key in TimeUnitsString]: AnimationHandlerPerUnit;
 }
 export type GrabbedElement = {
     dom:SVGGElement;
-    timeUnit:string;
+    timeUnit:TimeUnitsString;
     timeStep:string;
     startY:number;
     itrationDone:number;
@@ -81,8 +79,19 @@ export type GrabbedElement = {
     }
 }
 export type JBTimePickerValueObject = {
-    hour:number;
-    minute:number;
-    second?:number;
+    // hour:number;
+    // minute:number;
+    // second?:number;
+    [key in TimeUnitsString]:number
 }
 export type SecondRange = [null| number, null| number];
+export type TimeUnitsString = 'hour' | 'minute' | 'second';
+export type TimeUnitsObject = {
+    // hour:TimeUnitsString;
+    // minute:TimeUnitsString;
+    // second:TimeUnitsString;
+    [key in TimeUnitsString]:TimeUnitsString
+}
+type x={
+    [key in TimeUnitsString]:number
+}
