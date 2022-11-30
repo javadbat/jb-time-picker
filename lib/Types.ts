@@ -1,3 +1,5 @@
+import { omit } from "lodash";
+
 export type JBTimeInputElements = {
     svgDOM:SVGElement;
     timeIndicators: {
@@ -78,20 +80,15 @@ export type GrabbedElement = {
         captureMove: (movementY:number)=>void;
     }
 }
-export type JBTimePickerValueObject = {
-    // hour:number;
-    // minute:number;
-    // second?:number;
+type JBTimePickerFullValueObject = {
     [key in TimeUnitsString]:number
 }
+type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
+
+export type JBTimePickerValueObject = Optional<JBTimePickerFullValueObject, 'second'>;
+
 export type SecondRange = [null| number, null| number];
 export type TimeUnitsString = 'hour' | 'minute' | 'second';
 export type TimeUnitsObject = {
-    // hour:TimeUnitsString;
-    // minute:TimeUnitsString;
-    // second:TimeUnitsString;
     [key in TimeUnitsString]:TimeUnitsString
-}
-type x={
-    [key in TimeUnitsString]:number
 }

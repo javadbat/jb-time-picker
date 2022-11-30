@@ -33,7 +33,16 @@ export class JBTimePickerWebComponent extends HTMLElement {
     focusedTimeUnit: string | null = null;
     grabbedElement: GrabbedElement | null = null;
     // to show 01 instead of 1 in picker
-    frontalZero = false;
+    get frontalZero(){
+        return this.#frontalZero;
+    }
+    set frontalZero(value){
+        if(this.frontalZero !== value){
+            this.#frontalZero = value;
+            this.initTimeTextNodes();
+        }
+    }
+    #frontalZero = false;
     // user want to greyout some unit becuase they are optional
     set optionalUnits(value: TimeUnitsString[]) {
         this.#optionalUnits = value;

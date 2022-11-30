@@ -69,5 +69,6 @@ document.querySelector('jb-time-picker').frontalZero = true;
 ### optional units
 if you want to tell user some units is optional and greyout the numbers in picker you can set `optionalUnits`
 ```js
-document.querySelector('jb-time-picker').optionalUnits = [hour];
+//it could be 'hour' or 'minute' or 'second'
+document.querySelector('jb-time-picker').optionalUnits = ['hour'];
 ```
