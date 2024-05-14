@@ -1,5 +1,5 @@
-import { omit } from "lodash";
-
+export type TimeUnits = "hour" | "minute" | "second";
+export type TimeSteps = "prevTime" | "currentTime" | "nextTime" | "substitutePrevTime" | "substituteNextTime";
 export type JBTimeInputElements = {
     svgDOM:SVGElement;
     timeIndicators: {
@@ -64,7 +64,7 @@ export type AnimationHandler = {
 export type GrabbedElement = {
     dom:SVGGElement;
     timeUnit:TimeUnitsString;
-    timeStep:string;
+    timeStep:TimeSteps;
     startY:number;
     itrationDone:number;
     lastAction: string | null;
