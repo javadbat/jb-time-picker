@@ -10,7 +10,7 @@ import {
   TimeUnitsString,
   TimeUnits,
   TimeSteps
-} from "./Types";
+} from "./types1";
 const TimeUnits: TimeUnitsObject = {
   hour: "hour",
   minute: "minute",
