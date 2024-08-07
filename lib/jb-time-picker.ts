@@ -1,5 +1,5 @@
-import HTML from "./JBTimePicker.html";
-import CSS from "./JBTimePicker.scss";
+import HTML from "./jb-time-picker.html";
+import CSS from "./jb-time-picker.scss";
 import {
   AnimationHandler,
   DefaultPositions,
@@ -10,7 +10,7 @@ import {
   TimeUnitsString,
   TimeUnits,
   TimeSteps
-} from "./types1";
+} from "./types";
 const TimeUnits: TimeUnitsObject = {
   hour: "hour",
   minute: "minute",
@@ -35,7 +35,7 @@ export class JBTimePickerWebComponent extends HTMLElement {
     hour: 0,
   };
   elements!: JBTimeInputElements;
-  maxTimeUnitValues = {
+  maxTimeUnitValues:{[key in TimeUnits]:number} = {
     hour: 24,
     minute: 60,
     second: 60,
