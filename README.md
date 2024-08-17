@@ -68,7 +68,21 @@ document.querySelector('jb-time-picker').frontalZero = true;
 ```
 ### optional units
 if you want to tell user some units is optional and greyout the numbers in picker you can set `optionalUnits`
-```js
+```js 
 //it could be 'hour' or 'minute' or 'second'
 document.querySelector('jb-time-picker').optionalUnits = ['hour'];
+```
+
+### show persian number
+if you want to show persian number instead of english number chars. you can set `showPersianNumber`:
+```js 
+document.querySelector('jb-time-picker').showPersianNumber = true
+```
+
+### text width align
+different numbers have different width in monitor for example `1` is thinner than `8` or `4`. this width different is more visible when chars combined like `11` or `44`.    
+in jb-time-input you can set text width base on your font you use with `textWidth` prop. so 11 and 44 both occupy same amount of width.
+```js 
+//ideal number is between 150 - 300 base on your app font.
+document.querySelector('jb-time-picker').textWidth = 150;
 ```

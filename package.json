@@ -14,7 +14,7 @@
     "time",
     "web component"
   ],
-  "version": "2.2.0",
+  "version": "2.2.1",
   "bugs": "https://github.com/javadbat/jb-time-picker/issues",
   "license": "MIT",
   "files": [
@@ -28,7 +28,7 @@
   "typesVersions": {
     "*": {
       "*": ["./dist/web-component/jb-time-picker/lib/jb-time-picker.d.ts"],
-      "types":["./dist/web-component/jb-time-picker/lib//types.d.ts"]
+      "types":["./dist/web-component/jb-time-picker/lib/types.d.ts"]
     }
   },
   "repository": {
