@@ -3,9 +3,9 @@
   "description": "time picker web component",
   "type": "module",
   "author": {
-		"name": "mohammad javad bathaei",
-		"email": "javadbat@gmail.com"
-	},
+    "name": "mohammad javad bathaei",
+    "email": "javadbat@gmail.com"
+  },
   "keywords": [
     "jb",
     "jb-time-picker",
@@ -14,7 +14,7 @@
     "time",
     "web component"
   ],
-  "version": "2.2.1",
+  "version": "2.2.2",
   "bugs": "https://github.com/javadbat/jb-time-picker/issues",
   "license": "MIT",
   "files": [
@@ -24,15 +24,21 @@
     "dist/"
   ],
   "main": "index.js",
-  "types": "./dist/web-component/jb-time-picker/lib/jb-time-picker.d.ts",
-  "typesVersions": {
-    "*": {
-      "*": ["./dist/web-component/jb-time-picker/lib/jb-time-picker.d.ts"],
-      "types":["./dist/web-component/jb-time-picker/lib/types.d.ts"]
+  "exports": {
+    ".": {
+      "types": "./dist/web-component/jb-time-picker/lib/jb-time-picker.d.ts",
+      "default": "./dist/jb-time-picker.js",
+      "import": "./dist/jb-time-picker.js",
+      "require": "./dist/jb-time-picker.cjs.js"
+    },
+    "./types": {
+      "types": "./dist/web-component/jb-time-picker/lib/types.d.ts",
+      "default": "./dist/types.ts"
     }
   },
+  "types": "./dist/web-component/jb-time-picker/lib/jb-time-picker.d.ts",
   "repository": {
-		"type": "git",
-		"url": "git@github.com:javadbat/jb-time-picker.git"
+    "type": "git",
+    "url": "git@github.com:javadbat/jb-time-picker.git"
   }
 }
