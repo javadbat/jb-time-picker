@@ -1,7 +1,7 @@
 import HTML from "./jb-time-picker.html";
 import CSS from "./jb-time-picker.scss";
 import {AnimationHandler,DefaultPositions,GrabbedElement,JBTimeInputElements,JBTimePickerValueObject,TimeUnitsObject,TimeUnitsString,TimeUnits,TimeSteps} from "./types";
-import { enToFaDigits } from "../../../common/scripts/persian-helper";
+import { enToFaDigits } from "jb-core";
 
 
 const TimeUnits: TimeUnitsObject = {
