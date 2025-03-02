@@ -24,7 +24,7 @@
     "dist/"
   ],
   "main": "index.js",
-  "types": "./dist/web-component/jb-time-picker/lib/jb-time-picker.d.ts",
+  "types": "./dist/jb-time-picker.d.ts",
   "repository": {
     "type": "git",
     "url": "git@github.com:javadbat/jb-time-picker.git"

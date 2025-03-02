@@ -2,7 +2,7 @@ import HTML from "./jb-time-picker.html";
 import CSS from "./jb-time-picker.scss";
 import {AnimationHandler,DefaultPositions,GrabbedElement,JBTimeInputElements,JBTimePickerValueObject,TimeUnitsObject,TimeUnitsString,TimeUnits,TimeSteps} from "./types";
 import { enToFaDigits } from "jb-core";
-
+export * from "./types.js";
 
 const TimeUnits: TimeUnitsObject = {
   hour: "hour",
