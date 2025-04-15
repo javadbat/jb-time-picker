@@ -2,6 +2,7 @@ import HTML from "./jb-time-picker.html";
 import CSS from "./jb-time-picker.scss";
 import {AnimationHandler,DefaultPositions,GrabbedElement,JBTimeInputElements,JBTimePickerValueObject,TimeUnitsObject,TimeUnitsString,TimeUnits,TimeSteps} from "./types";
 import { enToFaDigits } from "jb-core";
+import {defineColors} from 'jb-core/theme';
 export * from "./types.js";
 
 const TimeUnits: TimeUnitsObject = {
@@ -138,6 +139,7 @@ export class JBTimePickerWebComponent extends HTMLElement {
     const shadowRoot = this.attachShadow({
       mode: "open",
     });
+    defineColors();
     const html = `<style>${CSS}</style>` + "\n" + HTML;
     const element = document.createElement("template");
     element.innerHTML = html;

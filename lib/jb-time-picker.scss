@@ -1,8 +1,8 @@
+@use './variables.css';
+
 .jb-time-picker-web-component {
     width: 272px;
     height: 272px;
-    color: #97999a;
-
     .svg-clock-wrapper {
         padding: 16px;
         .svg-clock {
@@ -10,11 +10,11 @@
             height: 100%;
             overflow: visible;
             .outer-circle {
-                fill: #f6f8f9;
+                fill: var(--outer-circle-color);
             }
 
             .inner-circle {
-                fill: #fff;
+                fill: var(--inner-circle-color);
             }
 
             .time-text-wrapper {
@@ -33,19 +33,19 @@
 
                 &.current-time {
                     .time-text {
-                        fill: #1e2832;
+                        fill: var(--current-text-color);
                         
                         &.--focused {
                             &.hour-text {
-                                fill: #2852bd;
+                                fill: var(--hour-color);
                             }
 
                             &.minute-text {
-                                fill: #28bd48;
+                                fill: var(--minute-color);
                             }
 
                             &.second-text {
-                                fill: #c3ff14;
+                                fill: var(--second-color);
                             }
                         }
                     }
@@ -53,7 +53,7 @@
                     .separator-text {
                         font-size: 150px;
                         text-anchor: middle;
-                        fill: #97999a;
+                        fill: var(--separator-text-color);
                         user-select: none;
                         &.--hidden {
                             display: none;
@@ -63,25 +63,25 @@
 
                 &.prev-time {
                     .time-text {
-                        fill: #97999a;
+                        fill: var(--prev-text-color);
                     }
                 }
 
                 &.next-time {
                     .time-text {
-                        fill: #97999a;
+                        fill: var(--next-text-color);
                     }
                 }
             }
 
             .time-indicators {
-                fill: #e6e6e6;
+                fill: var(--indicator-text-color);
 
                 .hour-indicator {
                     display: none;
                     &.--focused {
                         display: initial;
-                        fill: #2852bd;
+                        fill: var(--hour-color);
                     }
                 }
 
@@ -90,7 +90,7 @@
                     stroke-width: 10px;
                     &.--focused {
                         display: initial;
-                        fill: #28bd48;
+                        fill: var(--minute-color);
                     }
                 }
 
@@ -100,7 +100,7 @@
 
                     &.--focused {
                         display: initial;
-                        fill: #c3ff14;
+                        fill: var(--second-color);
                         &.--hidden {
                             display: none;
                         }

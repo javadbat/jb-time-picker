@@ -1,0 +1,12 @@
+:host{
+  --hour-color:var(--jb-time-picker-hour-color, var(--jb-primary));
+  --minute-color:var(--jb-time-picker-minute-color, var(--jb-secondary));
+  --second-color:var(--jb-time-picker-minute-color, var(--jb-highlight));
+  --outer-circle-color:var(--jb-time-picker-outer-circle-color, var(--jb-neutral-9));
+  --separator-text-color:var(--jb-time-picker-separator-text-color, var(--jb-neutral-8));
+  --indicator-color:var(--jb-time-picker-separator-text-color, var(--jb-neutral-8));
+  --prev-text-color: var(--jb-time-picker-prev-text-color, var(--jb-text-secondary));
+  --current-text-color: var(--jb-time-picker-current-text-color, var(--jb-text-primary));
+  --next-text-color: var(--jb-time-picker-next-text-color, var(--jb-text-secondary));
+  --inner-circle-color: var(--jb-time-picker-inner-circle-color, var(--jb-white))
+}

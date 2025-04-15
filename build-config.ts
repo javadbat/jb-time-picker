@@ -5,7 +5,7 @@ export const webComponentList: WebComponentBuildConfig[] = [
     name: "jb-time-picker",
     path: "./lib/jb-time-picker.ts",
     outputPath: "./dist/jb-time-picker.js",
-    external: [],
+    external: ["jb-core"],
     umdName: "JBTimePicker",
   },
 ];
