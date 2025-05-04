@@ -7,6 +7,9 @@ export const webComponentList: WebComponentBuildConfig[] = [
     outputPath: "./dist/jb-time-picker.js",
     external: ["jb-core"],
     umdName: "JBTimePicker",
+    globals: {
+      "jb-core": "JBCore"
+    },
   },
 ];
 export const reactComponentList: ReactComponentBuildConfig[] = [];
