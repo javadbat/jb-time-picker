@@ -11,7 +11,7 @@ declare global {
   }
 }
 export default {
-  title: 'Example/JBTimePicker',
+  title: 'Components/JBTimePicker',
   // component:
 };
 const Template = (args) => <jb-time-picker {...args}></jb-time-picker>;
