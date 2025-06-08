@@ -1,4 +1,6 @@
-<div class="jb-time-picker-web-component">
+export function renderHTML(): string {
+  return /* html */ `
+  <div class="jb-time-picker-web-component">
     <div class="svg-clock-wrapper">
         <svg class="svg-clock" viewBox="0 0 1024 1024">
             <circle cx="512" cy="512" r="512" class="outer-circle"></circle>
@@ -53,4 +55,6 @@
               </defs>
         </svg>
     </div>
-</div>
+  </div>
+  `;
+}
