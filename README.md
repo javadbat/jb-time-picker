@@ -1,12 +1,16 @@
 # jb-time-picker web component
 
 this component is 24hour svg-base time picker web component that use wheel to get time from user.
-sample: <https://codepen.io/javadbat/pen/yLgjGdv>
-## usage
+
+## Demo
+
+- [codepen](https://codepen.io/javadbat/pen/yLgjGdv)
+
+## Usage
 
 you just need to install it with npm and import it and use tag nothing more.
 
-```command
+```sh
 npm i jb-time-picker
 ```
 
