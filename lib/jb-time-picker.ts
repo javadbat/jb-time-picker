@@ -1,4 +1,5 @@
-import CSS from "./jb-time-picker.scss";
+import CSS from "./jb-time-picker.css";
+import VariablesCSS from "./variables.css";
 import { renderHTML } from "./render";
 import {AnimationHandler,DefaultPositions,GrabbedElement,JBTimeInputElements,JBTimePickerValueObject,TimeUnitsObject,TimeUnitsString,TimeUnits,TimeSteps} from "./types";
 import { enToFaDigits } from "jb-core";
@@ -140,7 +141,7 @@ export class JBTimePickerWebComponent extends HTMLElement {
       mode: "open",
     });
     registerDefaultVariables();
-    const html = `<style>${CSS}</style>` + "\n" + renderHTML();
+    const html = `<style>${CSS} ${VariablesCSS}</style>` + "\n" + renderHTML();
     const element = document.createElement("template");
     element.innerHTML = html;
     shadowRoot.appendChild(element.content.cloneNode(true));
