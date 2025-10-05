@@ -4,6 +4,8 @@ import { renderHTML } from "./render";
 import {AnimationHandler,DefaultPositions,GrabbedElement,JBTimeInputElements,JBTimePickerValueObject,TimeUnitsObject,TimeUnitsString,TimeUnits,TimeSteps} from "./types";
 import { enToFaDigits } from "jb-core";
 import {registerDefaultVariables} from 'jb-core/theme';
+import {i18n} from 'jb-core/i18n';
+
 export * from "./types.js";
 
 const TimeUnits: TimeUnitsObject = {
@@ -105,7 +107,7 @@ export class JBTimePickerWebComponent extends HTMLElement {
     }
   }
   //will show persian number even if user type en number but value will be passed as en number
-  #showPersianNumber = false;
+  #showPersianNumber = i18n.locale.numberingSystem == "arabext";
   get showPersianNumber() {
     return this.#showPersianNumber;
   }
