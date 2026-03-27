@@ -1,7 +1,7 @@
 import CSS from "./jb-time-picker.css";
 import VariablesCSS from "./variables.css";
 import { renderHTML } from "./render";
-import {AnimationHandler,DefaultPositions,GrabbedElement,JBTimeInputElements,JBTimePickerValueObject,TimeUnitsObject,TimeUnitsString,TimeUnits,TimeSteps} from "./types";
+import type {AnimationHandler,DefaultPositions,GrabbedElement,JBTimeInputElements,JBTimePickerValueObject,TimeUnitsObject,TimeUnitsString,TimeUnits,TimeSteps} from "./types";
 import { enToFaDigits } from "jb-core";
 import {registerDefaultVariables} from 'jb-core/theme';
 import {i18n} from 'jb-core/i18n';
@@ -141,9 +141,11 @@ export class JBTimePickerWebComponent extends HTMLElement {
   #initWebComponent() {
     const shadowRoot = this.attachShadow({
       mode: "open",
+      clonable:true,
+      serializable:true
     });
     registerDefaultVariables();
-    const html = `<style>${CSS} ${VariablesCSS}</style>` + "\n" + renderHTML();
+    const html = `<style>${CSS} ${VariablesCSS}</style>\n${renderHTML()}`;
     const element = document.createElement("template");
     element.innerHTML = html;
     shadowRoot.appendChild(element.content.cloneNode(true));
