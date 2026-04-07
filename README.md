@@ -90,3 +90,11 @@ in jb-time-input you can set text width base on your font you use with `textWidt
 //ideal number is between 150 - 300 base on your app font.
 document.querySelector('jb-time-picker').textWidth = 150;
 ```
+
+## Other Related Docs:
+
+- see [`jb-time-picker/react`](https://github.com/javadbat/jb-time-picker/tree/main/react) if you want to use this component in react.
+
+- see [All JB Design system Component List](https://javadbat.github.io/design-system/) for more components.
+
+- use [Contribution Guide](https://github.com/javadbat/design-system/blob/main/docs/contribution-guide.md) if you want to contribute in this component.
