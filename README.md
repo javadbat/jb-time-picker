@@ -11,12 +11,10 @@ this component is 24hour svg-base time picker web component that use wheel to ge
 
 - [codepen](https://codepen.io/javadbat/pen/yLgjGdv)
 
-## Using with JS frameworks
-
+## Using With JS Frameworks
 - [<img src="https://img.shields.io/badge/React.js-jb--time--picker%2Freact-000.svg?logo=react&logoColor=%2361DAFB" height="30" />](https://github.com/javadbat/jb-time-picker/tree/main/react)
 
 ## Usage
-
 you just need to install it with npm and import it and use tag nothing more.
 
 ```sh
@@ -94,14 +92,25 @@ document.querySelector('jb-time-picker').showPersianNumber = true
 
 ### text width align
 different numbers have different width in monitor for example `1` is thinner than `8` or `4`. this width different is more visible when chars combined like `11` or `44`.    
-in jb-time-input you can set text width base on your font you use with `textWidth` prop. so 11 and 44 both occupy same amount of width.
+in jb-time-input you can set text width based on your font you use with `textWidth` prop. so 11 and 44 both occupy same amount of width.
 ```js 
-//ideal number is between 150 - 300 base on your app font.
+//ideal number is between 150 - 300 based on your app font.
 document.querySelector('jb-time-picker').textWidth = 150;
 ```
 
-## Other Related Docs:
+## CSS Variables
+| CSS variable name | description |
+| --- | --- |
+| --jb-time-picker-current-text-color | Customize current text color. |
+| --jb-time-picker-hour-color | Customize hour color. |
+| --jb-time-picker-inner-circle-color | Customize inner circle color. |
+| --jb-time-picker-minute-color | Customize minute color. |
+| --jb-time-picker-next-text-color | Customize next text color. |
+| --jb-time-picker-outer-circle-color | Customize outer circle color. |
+| --jb-time-picker-prev-text-color | Customize prev text color. |
+| --jb-time-picker-separator-text-color | Customize separator text color. |
 
+## Related Docs
 - see [`jb-time-picker/react`](https://github.com/javadbat/jb-time-picker/tree/main/react) if you want to use this component in react.
 
 - see [All JB Design system Component List](https://javadbat.github.io/design-system/) for more components.
