@@ -1,5 +1,10 @@
 # jb-time-picker web component
 
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/jb-time-picker)
+[![GitHub license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://raw.githubusercontent.com/javadbat/jb-time-picker/main/LICENSE)
+[![NPM Version](https://img.shields.io/npm/v/jb-time-picker)](https://www.npmjs.com/package/jb-time-picker)
+![GitHub Created At](https://img.shields.io/github/created-at/javadbat/jb-time-picker)
+
 this component is 24hour svg-base time picker web component that use wheel to get time from user.
 
 ## Demo
