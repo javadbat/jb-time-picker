@@ -11,6 +11,10 @@ this component is 24hour svg-base time picker web component that use wheel to ge
 
 - [codepen](https://codepen.io/javadbat/pen/yLgjGdv)
 
+## Using with JS frameworks
+
+- [<img src="https://img.shields.io/badge/React.js-jb--time--picker%2Freact-000.svg?logo=react&logoColor=%2361DAFB" height="30" />](https://github.com/javadbat/jb-time-picker/tree/main/react)
+
 ## Usage
 
 you just need to install it with npm and import it and use tag nothing more.
