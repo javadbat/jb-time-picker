@@ -73,7 +73,7 @@
             }
 
             .time-indicators {
-                fill: var(--indicator-text-color);
+                fill: var(--indicator-color);
 
                 .hour-indicator {
                     display: none;

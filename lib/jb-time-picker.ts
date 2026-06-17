@@ -31,7 +31,7 @@ export class JBTimePickerWebComponent extends HTMLElement {
     minute: 0,
     hour: 0,
   };
-  elements: JBTimeInputElements;
+  elements!: JBTimeInputElements;
   #maxTimeUnitValues: { [key in TimeUnits]: number } = {
     hour: 24,
     minute: 59,
@@ -39,6 +39,7 @@ export class JBTimePickerWebComponent extends HTMLElement {
   };
   focusedTimeUnit: TimeUnits | null = null;
   #grabbedElement: GrabbedElement | null = null;
+  #isInitialized = false;
   // to show 01 instead of 1 in picker
   get frontalZero() {
     return this.#frontalZero;
@@ -54,11 +55,22 @@ export class JBTimePickerWebComponent extends HTMLElement {
    * @description user want to grey out some unit because they are optional
   */
   set optionalUnits(value: TimeUnitsString[]) {
-    this.#optionalUnits = value;
-    value.forEach((v) => {
+    const validUnits = value.filter((unit): unit is TimeUnitsString => unit in TimeUnitsObj);
+    const changedUnits = new Set([...this.#optionalUnits, ...validUnits]);
+    changedUnits.forEach((unit) => {
+      this.elements.currentTime[unit]?.classList.remove("--optional");
+      this.elements.nextTime[unit]?.classList.remove("--optional");
+      this.elements.prevTime[unit]?.classList.remove("--optional");
+      this.elements.substituteNextTime[unit]?.classList.remove("--optional");
+      this.elements.substitutePrevTime[unit]?.classList.remove("--optional");
+    });
+    this.#optionalUnits = validUnits;
+    validUnits.forEach((v) => {
       this.elements.currentTime[v]?.classList.add("--optional");
       this.elements.nextTime[v]?.classList.add("--optional");
       this.elements.prevTime[v]?.classList.add("--optional");
+      this.elements.substituteNextTime[v]?.classList.add("--optional");
+      this.elements.substitutePrevTime[v]?.classList.add("--optional");
     });
   }
   get optionalUnits() {
@@ -69,28 +81,30 @@ export class JBTimePickerWebComponent extends HTMLElement {
     return this.#value;
   }
   set value(value: JBTimePickerValueObject) {
-    if (!this.#animationHandler.hour.isTextAnimationPlaying) {
-      this.#updateValue(value.hour, "hour", false);
-    } else {
-      this.#animationHandler.hour.waitingAction = () => {
-        this.#updateValue(value.hour, "minute", false);
-      };
+    const normalizedValue: JBTimePickerValueObject = {
+      hour: this.#normalizeTimeUnitValue(value.hour, this.#value.hour, "hour"),
+      minute: this.#normalizeTimeUnitValue(value.minute, this.#value.minute, "minute"),
+    };
+    if (typeof value.second === "number") {
+      normalizedValue.second = this.#normalizeTimeUnitValue(value.second, this.#value.second ?? 0, "second");
     }
-    if (!this.#animationHandler.minute.isTextAnimationPlaying) {
-      this.#updateValue(value.minute, "minute", false);
-    } else {
-      this.#animationHandler.minute.waitingAction = () => {
-        this.#updateValue(value.minute, "minute", false);
-      };
+    if (!this.#animationHandler) {
+      this.#value = { ...this.#value, ...normalizedValue };
+      return;
     }
-    if (value.second) {
-      if (!this.#animationHandler.second.isTextAnimationPlaying) {
-        this.#updateValue(value.second, "second", false);
-      } else {
-        this.#animationHandler.second.waitingAction = () => {
-          this.#updateValue(value.second!, "second", false);
-        };
-      }
+    this.#setUnitValue(normalizedValue.hour, "hour");
+    this.#setUnitValue(normalizedValue.minute, "minute");
+    if (typeof normalizedValue.second === "number") {
+      this.#setUnitValue(normalizedValue.second, "second");
+    }
+  }
+  #setUnitValue(value: number, timeUnit: TimeUnitsString) {
+    if (!this.#animationHandler[timeUnit].isTextAnimationPlaying) {
+      this.#updateValue(value, timeUnit, false);
+    } else {
+      this.#animationHandler[timeUnit].waitingAction = () => {
+        this.#updateValue(value, timeUnit, false);
+      };
     }
   }
   get secondEnabled() {
@@ -194,9 +208,13 @@ export class JBTimePickerWebComponent extends HTMLElement {
   #initTimeUnitIndicator() {
     this.#placeTimeUnitIndicator("hour", this.value.hour);
     this.#placeTimeUnitIndicator("minute", this.value.minute);
-    if (this.secondEnabled && this.value.second) {
+    if (this.secondEnabled && typeof this.value.second === "number") {
       this.#placeTimeUnitIndicator("second", this.value.second);
     }
+  }
+  #normalizeTimeUnitValue(value: number | undefined, fallbackValue: number, timeUnit: TimeUnitsString) {
+    const numericValue = Number(value);
+    return this.#getValidValue(Number.isFinite(numericValue) ? numericValue : fallbackValue, timeUnit);
   }
   /**
    * initiate time unit text on component did mount or node display settings change
@@ -219,7 +237,7 @@ export class JBTimePickerWebComponent extends HTMLElement {
     const substitutePrevTimeWrapper = this.shadowRoot!.querySelector(
       ".substitute-prev-time"
     )!;
-    //remove old element if exist becuase we want fresh start in this function
+    //remove old element if exist because we want fresh start in this function
     if (this.elements.substitutePrevTime.hour) {
       this.elements.substitutePrevTime.hour.remove();
       this.elements.substitutePrevTime.hour = null;
@@ -234,7 +252,7 @@ export class JBTimePickerWebComponent extends HTMLElement {
     }
     //
     if (currentHour > 1) {
-      //in above code it remove i just keep this code for a whaile to make sure nothing happen
+      //in above code it remove i just keep this code for a while to make sure nothing happen
       // if (this.elements.substitutePrevTime.hour) {
       //     this.elements.substitutePrevTime.hour.remove();
       //     this.elements.substitutePrevTime.hour = null;
@@ -403,7 +421,7 @@ export class JBTimePickerWebComponent extends HTMLElement {
     }
     if (
       this.secondEnabled &&
-      currentSecond + 2 < this.#maxTimeUnitValues.second
+      currentSecond + 1 < this.#maxTimeUnitValues.second
     ) {
       const substituteNextTimeSecond = this.#createTimeTextDOM("second", "substituteNextTime", currentSecond + 2);
       substituteNextTimeWrapper.append(substituteNextTimeSecond);
@@ -527,7 +545,7 @@ export class JBTimePickerWebComponent extends HTMLElement {
     // and all this action make scale wrong or undefined so we must get it every time we need it
     Object.defineProperty(this.#defaultPositions, "svgPosScale", {
       get: () => {
-        if (this.elements.timeIndicators && this.elements.timeIndicators.hour) {
+        if (this.elements.timeIndicators?.hour) {
           const ctm = this.elements.timeIndicators.hour.getCTM();
           if (ctm && typeof ctm.inverse == "function") {
             return ctm.inverse().a;
@@ -561,19 +579,100 @@ export class JBTimePickerWebComponent extends HTMLElement {
     this.#initTimeTextNodes();
     this.#initTimeUnitIndicator();
     this.#initSeparators();
+    this.#isInitialized = true;
+    this.#applyInitialAttributes();
   }
   static get observedAttributes(): string[] {
-    return [];
+    return [
+      "value",
+      "second-enabled",
+      "frontal-zero",
+      "optional-units",
+      "show-persian-number",
+      "text-width",
+    ];
   }
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
     // do something when an attribute has changed
+    if (oldValue === newValue) {
+      return;
+    }
     this.#onAttributeChange(name, newValue);
   }
-  #onAttributeChange(name: string, value: string) {
-    // switch (name) {
-    //     // case 'name':
-    //     //     break;
-    // }
+  #applyInitialAttributes() {
+    JBTimePickerWebComponent.observedAttributes.forEach((name) => {
+      if (this.hasAttribute(name)) {
+        this.#onAttributeChange(name, this.getAttribute(name));
+      }
+    });
+  }
+  #onAttributeChange(name: string, value: string | null) {
+    if (!this.#isInitialized) {
+      return;
+    }
+    switch (name) {
+      case "value": {
+        const parsedValue = this.#parseValueAttribute(value);
+        if (parsedValue) {
+          this.value = parsedValue;
+        }
+        break;
+      }
+      case "second-enabled":
+        this.secondEnabled = this.#parseBooleanAttribute(value, true);
+        break;
+      case "frontal-zero":
+        this.frontalZero = this.#parseBooleanAttribute(value, false);
+        break;
+      case "optional-units":
+        this.optionalUnits = this.#parseOptionalUnits(value);
+        break;
+      case "show-persian-number":
+        this.showPersianNumber = this.#parseBooleanAttribute(value, false);
+        break;
+      case "text-width":
+        this.textWidth = value === null || value === "" || !Number.isFinite(Number(value)) ? null : Number(value);
+        this.#initTimeTextNodes();
+        break;
+    }
+  }
+  #parseBooleanAttribute(value: string | null, defaultValue: boolean) {
+    if (value === null) {
+      return defaultValue;
+    }
+    if (value === "" || value.toLowerCase() === "true") {
+      return true;
+    }
+    if (value.toLowerCase() === "false") {
+      return false;
+    }
+    return Boolean(value);
+  }
+  #parseOptionalUnits(value: string | null) {
+    if (!value) {
+      return [];
+    }
+    return value
+      .split(/[,\s]+/g)
+      .filter((unit): unit is TimeUnitsString => unit in TimeUnitsObj);
+  }
+  #parseValueAttribute(value: string | null): JBTimePickerValueObject | null {
+    if (!value) {
+      return null;
+    }
+    const trimmedValue = value.trim();
+    if (trimmedValue.startsWith("{")) {
+      try {
+        return JSON.parse(trimmedValue) as JBTimePickerValueObject;
+      } catch {
+        return null;
+      }
+    }
+    const [hour, minute, second] = trimmedValue.split(":").map((part) => Number(part));
+    if (!Number.isFinite(hour) || !Number.isFinite(minute)) {
+      return null;
+    }
+    return Number.isFinite(second) ? { hour, minute, second } : { hour, minute };
   }
   #handleTextClick(timeUnit: TimeUnitsString, timeStep: TimeSteps) {
     //in mouse up we check if user not dragged anything call click by ourself
@@ -592,7 +691,11 @@ export class JBTimePickerWebComponent extends HTMLElement {
     this.#handleTextMouseDown(currentYPos, timeUnit, timeStep);
   }
   #handleTextMouseDown(currentYPos: number, timeUnit: TimeUnits, timeStep: TimeSteps) {
-    const grabbedElement = this.elements.prevTime[timeUnit];
+    const grabbedElement = this.elements[timeStep][timeUnit];
+    // debugger;
+    if (!grabbedElement) {
+      return;
+    }
     this.#grabbedElement = {
       dom: grabbedElement,
       timeUnit: timeUnit,
@@ -866,8 +969,8 @@ export class JBTimePickerWebComponent extends HTMLElement {
     );
 
     // add new prev substitute element
-    if (this.#value[timeUnit]??0 + 1 < this.#maxTimeUnitValues[timeUnit]) {
-      const nextSubstituteValue = this.#value[timeUnit]??0 + 2;
+    if ((this.#value[timeUnit] ?? 0) + 1 < this.#maxTimeUnitValues[timeUnit]) {
+      const nextSubstituteValue = (this.#value[timeUnit] ?? 0) + 2;
       const newSubstituteNext = this.#createTimeTextDOM(timeUnit, "substituteNextTime", nextSubstituteValue);
       this.elements.substituteNextTime.wrapper.appendChild(newSubstituteNext);
       this.elements.substituteNextTime[timeUnit] = newSubstituteNext;

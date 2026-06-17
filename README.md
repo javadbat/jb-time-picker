@@ -1,118 +1,210 @@
-# jb-time-picker web component
+# jb-time-picker
 
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/jb-time-picker)
 [![GitHub license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://raw.githubusercontent.com/javadbat/jb-time-picker/main/LICENSE)
 [![NPM Version](https://img.shields.io/npm/v/jb-time-picker)](https://www.npmjs.com/package/jb-time-picker)
 ![GitHub Created At](https://img.shields.io/github/created-at/javadbat/jb-time-picker)
 
-this component is 24hour svg-base time picker web component that use wheel to get time from user.
+`jb-time-picker` is a 24-hour SVG time picker web component. Users can drag or tap the wheel text to change hour, minute, and optional second values.
+
+- Uses an object value: `{ hour, minute, second }`.
+- Supports hour, minute, and second selection.
+- Can hide the second unit for hour/minute-only picking.
+- Supports Persian digit display while keeping `.value` numeric.
+- Supports optional time units with muted visual style.
+- Exposes CSS variables and CSS parts for clock customization.
+
+## When to use
+
+Use `jb-time-picker` when users need a visual clock-like picker for time values.
+
+Use [`jb-time-input`](https://github.com/javadbat/jb-time-input) when the user should type a time in an input field instead of using the SVG wheel.
 
 ## Demo
 
-- [codepen](https://codepen.io/javadbat/pen/yLgjGdv)
+- [CodePen](https://codepen.io/javadbat/pen/yLgjGdv)
+- [Storybook](https://javadbat.github.io/design-system/?path=/docs/components-jbtimepicker)
 
-## Using With JS Frameworks
-- [<img src="https://img.shields.io/badge/React.js-jb--time--picker%2Freact-000.svg?logo=react&logoColor=%2361DAFB" height="30" />](https://github.com/javadbat/jb-time-picker/tree/main/react)
+## React
 
-## Usage
-you just need to install it with npm and import it and use tag nothing more.
+A React wrapper is not available yet. Use the web component directly in React and see [`react/README.md`](./react/README.md) for current notes.
+
+## Installation
 
 ```sh
 npm i jb-time-picker
 ```
 
-import and load web component in any js file
-
-```javascript
-import 'jb-time-picker'
+```js
+import 'jb-time-picker';
 ```
-
-use it in your html or jsx or any other markup file:
 
 ```html
 <jb-time-picker></jb-time-picker>
 ```
 
-## set and get value
+### CDN
 
-you can set or get component value by using standard value property object
-
-```javascript
-//get value
-console.log(document.querySelector('jb-time-picker').value)
-//set value
-document.querySelector('jb-time-picker').value = {hour:3,minute:10,second:20}
-
+```html
+<script src="https://unpkg.com/jb-time-picker/dist/jb-time-picker.umd.js"></script>
 ```
 
-## set time focus
+## API reference
 
-you can focus in one of time unit like hour or minute with code when you need to. for example when you want user pay attention to hour and change it first to do that just call `setTimeUnitFocus` function:
+### Attributes
 
-```javascript
-//focus on hour
-document.querySelector('jb-time-picker').setTimeUnitFocus('hour')
-//focus on minute
-document.querySelector('jb-time-picker').setTimeUnitFocus('minute')
-//focus on second
-document.querySelector('jb-time-picker').setTimeUnitFocus('second')
+| name | type | default | description |
+| --- | --- | --- | --- |
+| `value` | `string` | none | Initial time value. Accepts `HH:mm`, `HH:mm:ss`, or JSON such as `{"hour":3,"minute":10,"second":20}`. |
+| `second-enabled` | `boolean` | `true` | Shows the second unit. Empty attribute and `"true"` mean true; `"false"` means false. |
+| `frontal-zero` | `boolean` | `false` | Displays values below 10 with a leading zero. |
+| `optional-units` | `string` | `""` | Comma or space separated list of muted units: `hour`, `minute`, `second`. |
+| `show-persian-number` | `boolean` | locale based | Displays Persian digits while `.value` remains numeric. |
+| `text-width` | `number` | `null` | SVG `textLength` used to align time text for custom fonts. |
 
-```
+### Properties
 
-## event
+| name | type | readonly | description |
+| --- | --- | --- | --- |
+| `value` | `{ hour: number; minute: number; second?: number }` | no | Current selected time. Values are clamped to valid ranges. |
+| `secondEnabled` | `boolean` | no | Shows or hides the second unit. |
+| `frontalZero` | `boolean` | no | Displays `02` instead of `2` for values below 10. |
+| `optionalUnits` | `Array<'hour' \| 'minute' \| 'second'>` | no | Units shown as optional/muted. |
+| `showPersianNumber` | `boolean` | no | Displays Persian digits in the SVG text. |
+| `textWidth` | `number \| null` | no | SVG text width used for alignment. |
+| `focusedTimeUnit` | `'hour' \| 'minute' \| 'second' \| null` | no | Currently focused unit. Prefer `setTimeUnitFocus()` for updates. |
 
-```javascript
-//on change
-document.querySelector('jb-time-picker').addEventListener('change', (e)=>{console.log(e.target.value)});
+### Methods
 
-```
+| name | returns | description |
+| --- | --- | --- |
+| `setTimeUnitFocus(timeUnit)` | `void` | Focuses `hour`, `minute`, or `second` so its text and indicator use the active color. |
 
-### disable second
-if you want to just input minute and hour and disable second in picker and input just set `secondEnabled` to `false`
-```javascript
-    document.querySelector('jb-time-picker').secondEnabled = false;
-```
-### frontal zero
-if you want picker to show `02` instead of `2` when number is less than 10 just set `frontalZero` of timepicker default is `false`.    
+### Events
+
+| event | description |
+| --- | --- |
+| `load` | Dispatched from `connectedCallback` before initialization. |
+| `init` | Dispatched from `connectedCallback` after initialization. |
+| `change` | Dispatched when the user changes a time unit. Programmatic `.value` updates do not dispatch `change`. |
+
+## Value
+
+Set and read the time through the `.value` property.
+
 ```js
-document.querySelector('jb-time-picker').frontalZero = true;
-```
-### optional units
-if you want to tell user some units is optional and greyout the numbers in picker you can set `optionalUnits`
-```js 
-//it could be 'hour' or 'minute' or 'second'
-document.querySelector('jb-time-picker').optionalUnits = ['hour'];
+const timePicker = document.querySelector('jb-time-picker');
+
+timePicker.value = { hour: 3, minute: 10, second: 20 };
+
+console.log(timePicker.value); // { hour: 3, minute: 10, second: 20 }
 ```
 
-### show persian number
-if you want to show persian number instead of english number chars. you can set `showPersianNumber`:
-```js 
-document.querySelector('jb-time-picker').showPersianNumber = true
+In HTML, use a compact string or JSON:
+
+```html
+<jb-time-picker value="03:10:20"></jb-time-picker>
+<jb-time-picker value='{"hour":3,"minute":10,"second":20}'></jb-time-picker>
 ```
 
-### text width align
-different numbers have different width in monitor for example `1` is thinner than `8` or `4`. this width different is more visible when chars combined like `11` or `44`.    
-in jb-time-input you can set text width based on your font you use with `textWidth` prop. so 11 and 44 both occupy same amount of width.
-```js 
-//ideal number is between 150 - 300 based on your app font.
-document.querySelector('jb-time-picker').textWidth = 150;
+## Focus a time unit
+
+```js
+const timePicker = document.querySelector('jb-time-picker');
+
+timePicker.setTimeUnitFocus('hour');
+timePicker.setTimeUnitFocus('minute');
+timePicker.setTimeUnitFocus('second');
 ```
 
-## CSS Variables
+## Disable seconds
+
+Use this when the picker should only collect hour and minute.
+
+```html
+<jb-time-picker second-enabled="false"></jb-time-picker>
+```
+
+```js
+document.querySelector('jb-time-picker').secondEnabled = false;
+```
+
+## Display options
+
+```js
+const timePicker = document.querySelector('jb-time-picker');
+
+timePicker.frontalZero = true;
+timePicker.optionalUnits = ['second'];
+timePicker.showPersianNumber = true;
+timePicker.textWidth = 150;
+```
+
+```html
+<jb-time-picker
+  frontal-zero
+  optional-units="second"
+  show-persian-number
+  text-width="150"
+></jb-time-picker>
+```
+
+`textWidth` is useful when custom fonts make narrow digits such as `1` look visually misaligned with wider digits such as `8`. A practical range is usually `150` to `300`.
+
+## CSS parts and variables
+
+| part | description |
+| --- | --- |
+| `wrapper` | Root wrapper inside the shadow DOM. |
+| `clock` | SVG clock element. |
+| `outer-circle` | Outer SVG circle. |
+| `inner-circle` | Inner SVG circle. |
+| `time-indicators` | Wrapper around hour, minute, and second indicators. |
+
 | CSS variable name | description |
 | --- | --- |
-| --jb-time-picker-current-text-color | Customize current text color. |
-| --jb-time-picker-hour-color | Customize hour color. |
-| --jb-time-picker-inner-circle-color | Customize inner circle color. |
-| --jb-time-picker-minute-color | Customize minute color. |
-| --jb-time-picker-next-text-color | Customize next text color. |
-| --jb-time-picker-outer-circle-color | Customize outer circle color. |
-| --jb-time-picker-prev-text-color | Customize prev text color. |
-| --jb-time-picker-separator-text-color | Customize separator text color. |
+| `--jb-time-picker-hour-color` | Focused hour text and indicator color. |
+| `--jb-time-picker-minute-color` | Focused minute text and indicator color. |
+| `--jb-time-picker-second-color` | Focused second text and indicator color. |
+| `--jb-time-picker-outer-circle-color` | Outer clock circle color. |
+| `--jb-time-picker-inner-circle-color` | Inner clock circle color. |
+| `--jb-time-picker-separator-text-color` | Separator text color. |
+| `--jb-time-picker-indicator-color` | Default indicator color. |
+| `--jb-time-picker-prev-text-color` | Previous value text color. |
+| `--jb-time-picker-current-text-color` | Current value text color. |
+| `--jb-time-picker-next-text-color` | Next value text color. |
+
+```css
+jb-time-picker {
+  --jb-time-picker-hour-color: #2563eb;
+  --jb-time-picker-minute-color: #059669;
+  --jb-time-picker-second-color: #dc2626;
+}
+
+jb-time-picker::part(outer-circle) {
+  opacity: 0.9;
+}
+```
+
+## Accessibility notes
+
+- The component is an SVG interaction surface, not a native form control.
+- It does not currently attach `ElementInternals` or submit a form value automatically.
+- Add surrounding labels and summary text in your app when screen-reader users need an accessible time editing flow.
 
 ## Related Docs
-- see [`jb-time-picker/react`](https://github.com/javadbat/jb-time-picker/tree/main/react) if you want to use this component in react.
 
-- see [All JB Design system Component List](https://javadbat.github.io/design-system/) for more components.
+- See [`jb-time-input`](https://github.com/javadbat/jb-time-input) for typed time input.
+- See [All JB Design System Component List](https://javadbat.github.io/design-system/) for more components.
+- Use [Contribution Guide](https://github.com/javadbat/design-system/blob/main/docs/contribution-guide.md) if you want to contribute to this component.
 
-- use [Contribution Guide](https://github.com/javadbat/design-system/blob/main/docs/contribution-guide.md) if you want to contribute in this component.
+## AI agent notes
+
+- Import `jb-time-picker` once before using `<jb-time-picker>`.
+- Use `.value` as the canonical API; it is an object, not a string.
+- Use `value="HH:mm:ss"` or a JSON string only for initial markup.
+- Use `secondEnabled = false` or `second-enabled="false"` for hour/minute-only picking.
+- Use `setTimeUnitFocus('hour' | 'minute' | 'second')` to change the focused unit.
+- Listen to `change` for user edits. Programmatic `.value` updates are silent.
+- This package includes [`custom-elements.json`](./custom-elements.json) and points to it with the package.json `customElements` field. The field is documented by the Custom Elements Manifest project in [Referencing manifests from npm packages](https://github.com/webcomponents/custom-elements-manifest#referencing-manifests-from-npm-packages).
+- In `custom-elements.json`, `exports.kind: "js"` describes JavaScript/TypeScript exports and `exports.kind: "custom-element-definition"` maps the `jb-time-picker` tag name to `JBTimePickerWebComponent`.

@@ -1,0 +1,241 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "README.md",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "lib/jb-time-picker.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "24-hour SVG time picker web component with wheel-style hour, minute, optional second selection, Persian digit display, and configurable clock colors.",
+          "name": "JBTimePickerWebComponent",
+          "tagName": "jb-time-picker",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement"
+          },
+          "attributes": [
+            {
+              "name": "value",
+              "description": "Initial time value. Accepts HH:mm, HH:mm:ss, or a JSON object string with hour, minute, and optional second.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "second-enabled",
+              "description": "Shows the second unit. Empty attribute and true mean enabled; false disables seconds.",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true"
+            },
+            {
+              "name": "frontal-zero",
+              "description": "Displays values below 10 with a leading zero.",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "name": "optional-units",
+              "description": "Comma or space separated list of units displayed as optional: hour, minute, second.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "show-persian-number",
+              "description": "Displays Persian digits while keeping the value object numeric.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "name": "text-width",
+              "description": "SVG textLength used to align time values with custom fonts.",
+              "type": {
+                "text": "number"
+              }
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "value",
+              "description": "Current selected time object. Programmatic updates are clamped to valid ranges and do not dispatch change.",
+              "type": {
+                "text": "{ hour: number; minute: number; second?: number }"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "secondEnabled",
+              "description": "Shows or hides the second unit.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "frontalZero",
+              "description": "Displays values below 10 with a leading zero.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "optionalUnits",
+              "description": "Units displayed as optional/muted.",
+              "type": {
+                "text": "Array<'hour' | 'minute' | 'second'>"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "showPersianNumber",
+              "description": "Displays Persian digits in the SVG text.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "textWidth",
+              "description": "SVG textLength used to align time values with custom fonts.",
+              "type": {
+                "text": "number | null"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "focusedTimeUnit",
+              "description": "Currently focused time unit. Prefer setTimeUnitFocus for updates.",
+              "type": {
+                "text": "'hour' | 'minute' | 'second' | null"
+              }
+            }
+          ],
+          "methods": [
+            {
+              "name": "setTimeUnitFocus",
+              "description": "Focuses hour, minute, or second so its text and indicator use the active color.",
+              "parameters": [
+                {
+                  "name": "timeUnit",
+                  "type": {
+                    "text": "'hour' | 'minute' | 'second'"
+                  }
+                }
+              ],
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              }
+            }
+          ],
+          "events": [
+            {
+              "name": "load",
+              "description": "Dispatched from connectedCallback before initialization."
+            },
+            {
+              "name": "init",
+              "description": "Dispatched from connectedCallback after initialization."
+            },
+            {
+              "name": "change",
+              "description": "Dispatched when the user changes a time unit. Programmatic value updates do not dispatch change."
+            }
+          ],
+          "cssParts": [
+            {
+              "name": "wrapper",
+              "description": "Root wrapper inside the shadow DOM."
+            },
+            {
+              "name": "clock",
+              "description": "SVG clock element."
+            },
+            {
+              "name": "outer-circle",
+              "description": "Outer SVG circle."
+            },
+            {
+              "name": "inner-circle",
+              "description": "Inner SVG circle."
+            },
+            {
+              "name": "time-indicators",
+              "description": "Wrapper around hour, minute, and second indicators."
+            }
+          ],
+          "cssProperties": [
+            {
+              "name": "--jb-time-picker-hour-color",
+              "description": "Focused hour text and indicator color."
+            },
+            {
+              "name": "--jb-time-picker-minute-color",
+              "description": "Focused minute text and indicator color."
+            },
+            {
+              "name": "--jb-time-picker-second-color",
+              "description": "Focused second text and indicator color."
+            },
+            {
+              "name": "--jb-time-picker-outer-circle-color",
+              "description": "Outer clock circle color."
+            },
+            {
+              "name": "--jb-time-picker-inner-circle-color",
+              "description": "Inner clock circle color."
+            },
+            {
+              "name": "--jb-time-picker-separator-text-color",
+              "description": "Separator text color."
+            },
+            {
+              "name": "--jb-time-picker-indicator-color",
+              "description": "Default indicator color."
+            },
+            {
+              "name": "--jb-time-picker-prev-text-color",
+              "description": "Previous value text color."
+            },
+            {
+              "name": "--jb-time-picker-current-text-color",
+              "description": "Current value text color."
+            },
+            {
+              "name": "--jb-time-picker-next-text-color",
+              "description": "Next value text color."
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "JBTimePickerWebComponent",
+          "declaration": {
+            "name": "JBTimePickerWebComponent",
+            "module": "lib/jb-time-picker.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "jb-time-picker",
+          "declaration": {
+            "name": "JBTimePickerWebComponent",
+            "module": "lib/jb-time-picker.ts"
+          }
+        }
+      ]
+    }
+  ]
+}

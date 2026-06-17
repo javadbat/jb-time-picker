@@ -1,10 +1,10 @@
 export function renderHTML(): string {
   return /* html */ `
-  <div class="jb-time-picker-web-component">
+  <div class="jb-time-picker-web-component" part="wrapper">
     <div class="svg-clock-wrapper">
-        <svg class="svg-clock" viewBox="0 0 1024 1024">
-            <circle cx="512" cy="512" r="512" class="outer-circle"></circle>
-            <circle cx="512" cy="512" r="480" class="inner-circle"></circle>
+        <svg class="svg-clock" part="clock" viewBox="0 0 1024 1024">
+            <circle cx="512" cy="512" r="512" class="outer-circle" part="outer-circle"></circle>
+            <circle cx="512" cy="512" r="480" class="inner-circle" part="inner-circle"></circle>
             <g class="time-text-wrapper substitute-prev-time" mask="url(#PrevTimeWrapperMask)">
             </g>
             <g class="time-text-wrapper prev-time" mask="url(#PrevTimeWrapperMask)">
@@ -17,7 +17,7 @@ export function renderHTML(): string {
             </g>
             <g class="time-text-wrapper substitute-next-time" mask="url(#NextTimeWrapperMask)">
             </g>
-            <g class="time-indicators">
+            <g class="time-indicators" part="time-indicators">
                 <use class="hour-indicator"  xlink:href="#HourSymbol" x="512" y="512"></use>
                 <use class="minute-indicator"  xlink:href="#MinuteSymbol" x="512" y="512"></use>
                 <use class="second-indicator"  xlink:href="#SecondSymbol" x="512" y="512"></use>
