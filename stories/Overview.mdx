@@ -1,0 +1,18 @@
+import {Meta, Title, Story, Controls, Stories, Source} from '@storybook/blocks';
+import * as TimePickerStories from './JBTimePicker.stories';
+
+<Meta of={TimePickerStories}/>
+
+<Title>JB Time Picker</Title>
+
+Time picker component for selecting hour, minute, and second values.
+
+<Story of={TimePickerStories.ValueTest}/>
+<Controls of={TimePickerStories.ValueTest}/>
+<Source of={TimePickerStories.ValueTest}/>
+
+## Basic usage
+<Story of={TimePickerStories.Normal}/>
+
+## Other samples & variants
+<Stories/>
