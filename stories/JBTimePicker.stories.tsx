@@ -1,4 +1,5 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 import 'jb-time-picker';
 import JBTimePickerValueTest from './samples/JBTimePickerValueTest';
 
@@ -10,22 +11,27 @@ declare global {
     }
   }
 }
-export default {
+const meta = {
   title: 'Components/JBTimePicker',
   // component:
+} satisfies Meta;
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Normal: Story = {
+  render: (args) => <jb-time-picker {...args}></jb-time-picker>,
+  args: {
+    hour: 0,
+    minute: 0,
+    second: 0
+  }
 };
-const Template = (args) => <jb-time-picker {...args}></jb-time-picker>;
-export const Normal = Template.bind({});
-Normal.args = {
+
+export const RTLSample: Story = {
+  render: (args) => <div style={{ direction: 'rtl' }}><jb-time-picker {...args}></jb-time-picker></div>,
+  args: {}
 };
-const RTLTemplate = (args) => <div style={{direction:'rtl'}}><jb-time-picker {...args}></jb-time-picker></div>;
-export const RTLSample = RTLTemplate.bind({});
-RTLSample.args = {
-};
-const ValueTestTemplate = (args) => <JBTimePickerValueTest {...args}></JBTimePickerValueTest>;
-export const ValueTest = ValueTestTemplate.bind({});
-Normal.args = {
-  hour:0,
-  minute:0,
-  second:0
+
+export const ValueTest: Story = {
+  render: (args) => <JBTimePickerValueTest {...args}></JBTimePickerValueTest>
 };
