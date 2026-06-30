@@ -6,26 +6,10 @@ import type { JBTimePickerValueObject, JBTimePickerWebComponent, TimeUnits } fro
 import type { JBElementStandardProps } from "jb-core/react";
 import { useJBTimePickerAttribute, type JBTimePickerAttributes } from "./attributes-hook.js";
 import { type EventProps, useEvents, type JBTimePickerEventType } from "./events-hook.js";
+import "./module-declaration.js";
 
 export type { JBTimePickerValueObject, JBTimePickerWebComponent, TimeUnits, JBTimePickerEventType };
 export { useEvents, useJBTimePickerAttribute, type EventProps, type JBTimePickerAttributes };
-
-declare module "react" {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace JSX {
-    interface IntrinsicElements {
-      "jb-time-picker": JBTimePickerType;
-    }
-    interface JBTimePickerType extends React.DetailedHTMLProps<React.HTMLAttributes<JBTimePickerWebComponent>, JBTimePickerWebComponent> {
-      "value"?: string,
-      "second-enabled"?: string,
-      "frontal-zero"?: string,
-      "optional-units"?: string,
-      "show-persian-number"?: string,
-      "text-width"?: string,
-    }
-  }
-}
 
 // eslint-disable-next-line react/display-name
 const JBTimePicker = React.forwardRef((props: Props, ref) => {
