@@ -14,4 +14,19 @@ export const webComponentList: WebComponentBuildConfig[] = [
     },
   },
 ];
-export const reactComponentList: ReactComponentBuildConfig[] = [];
+export const reactComponentList: ReactComponentBuildConfig[] = [
+  {
+    name: "jb-time-picker-react",
+    path: "./react/lib/JBTimePicker.tsx",
+    outputPath: "./react/dist/JBTimePicker.js",
+    external: ["react", "jb-time-picker", "jb-core", "jb-core/react"],
+    globals: {
+      react: "React",
+      "jb-time-picker": "JBTimePicker",
+      "jb-core": "JBCore",
+      "jb-core/react": "JBCoreReact",
+    },
+    umdName: "JBTimePickerReact",
+    dir: "./react"
+  },
+];

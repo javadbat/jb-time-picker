@@ -1,33 +1,46 @@
-# JBTimePicker React notes
+# jb-time-picker-react
 
-The React wrapper is not available yet. If you need it, please open an issue in [`jb-time-picker`](https://github.com/javadbat/jb-time-picker/issues).
+React component wrapper around [`jb-time-picker`](https://github.com/javadbat/jb-time-picker).
 
-For current usage, import and render the web component directly:
+## Installation
 
-```jsx
-import 'jb-time-picker';
+```bash
+npm i jb-time-picker-react
+```
+
+## Usage
+
+```tsx
+import { JBTimePicker } from 'jb-time-picker-react';
 
 export function TimePickerSample() {
-  return <jb-time-picker value="03:10:20"></jb-time-picker>;
+  return (
+    <JBTimePicker
+      value={{ hour: 3, minute: 10, second: 20 }}
+      frontalZero
+      onChange={(e) => console.log(e.target.value)}
+    />
+  );
 }
 ```
 
-To set object properties such as `.value`, use a ref:
+You can also pass the value as a time string:
 
-```jsx
-import { useEffect, useRef } from 'react';
-import 'jb-time-picker';
-
-export function TimePickerSample() {
-  const timePickerRef = useRef(null);
-
-  useEffect(() => {
-    timePickerRef.current.value = { hour: 3, minute: 10, second: 20 };
-  }, []);
-
-  return <jb-time-picker ref={timePickerRef}></jb-time-picker>;
-}
+```tsx
+<JBTimePicker value="03:10:20" />
 ```
+
+## Props
+
+- `value?: { hour: number, minute: number, second?: number } | string | null`
+- `secondEnabled?: boolean`
+- `frontalZero?: boolean`
+- `optionalUnits?: ('hour' | 'minute' | 'second')[]`
+- `showPersianNumber?: boolean`
+- `textWidth?: number | null`
+- `onLoad?: (event) => void`
+- `onInit?: (event) => void`
+- `onChange?: (event) => void`
 
 ## Demo
 

@@ -1,0 +1,38 @@
+{
+  "name": "jb-time-picker-react",
+  "description": "time picker react component",
+  "type": "module",
+  "author": {
+    "name": "mohammad javad bathaei",
+    "email": "javadbat@gmail.com"
+  },
+  "keywords": [
+    "jb",
+    "jb-time-picker",
+    "jb-time-picker-react",
+    "time",
+    "time picker",
+    "clock",
+    "react component",
+    "react"
+  ],
+  "version": "0.0.1",
+  "bugs": "https://github.com/javadbat/jb-time-picker-react/issues",
+  "license": "MIT",
+  "files": [
+    "LICENSE",
+    "README.md",
+    "lib/",
+    "dist/"
+  ],
+  "main": "index.js",
+  "types": "./dist/JBTimePicker.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:javadbat/jb-time-picker-react.git"
+  },
+  "dependencies": {
+    "jb-time-picker": ">=2.3.1",
+    "jb-core": ">=0.25.0"
+  }
+}
