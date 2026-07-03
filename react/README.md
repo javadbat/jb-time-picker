@@ -46,6 +46,46 @@ You can also pass the value as a time string:
 
 - [Storybook](https://javadbat.github.io/design-system/?path=/docs/components-jbtimepicker)
 
+## When to use
+
+Use `JBTimePicker` when a React view needs an inline time picker for hour, minute, and optionally second selection.
+
+Use `JBTimeInput` when the user should type into a form field and open a picker from that input.
+
+## Value
+
+`value` accepts either an object with `hour`, `minute`, and optional `second`, or a time string such as `"03:10:20"`. Read `event.target.value` from `onChange`.
+
+## Focus a time unit
+
+Use a ref for imperative web-component methods such as focusing a specific time unit when the picker should guide the next edit.
+
+## Disable seconds
+
+Set `secondEnabled={false}` for hour/minute-only picking.
+
+```tsx
+<JBTimePicker secondEnabled={false} value="03:10" />
+```
+
+## Display options
+
+Use `frontalZero`, `optionalUnits`, `showPersianNumber`, and `textWidth` to match the web-component display behavior from React.
+
+## CSS parts and variables
+
+The React wrapper uses the same CSS parts and variables as the web component.
+
+```css
+.compact-time-picker {
+  --jb-time-picker-active-color: #2563eb;
+}
+```
+
+## Accessibility notes
+
+Provide nearby label text that describes the time being selected. Prefer `JBTimeInput` when the time value is part of a larger form and needs a conventional labeled input.
+
 ## Shared Documentation
 
 For web-component behavior, events, and CSS variables, see [`jb-time-picker`](https://github.com/javadbat/jb-time-picker).
