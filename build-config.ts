@@ -3,8 +3,9 @@ import type { ReactComponentBuildConfig, WebComponentBuildConfig } from "../../t
 export const webComponentList: WebComponentBuildConfig[] = [
   {
     name: "jb-time-picker",
-    path: "./lib/jb-time-picker.ts",
-    outputPath: "./dist/jb-time-picker.js",
+    path: "./web-component/lib/jb-time-picker.ts",
+    outputPath: "./web-component/dist/jb-time-picker.js",
+    tsConfigPath: "./web-component/tsconfig.json",
     external: ["jb-core", "jb-core/i18n", "jb-core/theme"],
     umdName: "JBTimePicker",
     globals: {

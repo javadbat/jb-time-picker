@@ -1,2 +1,2 @@
-import './dist/jb-time-picker.js';
-export * from './dist/jb-time-picker.js';
+import './web-component/dist/jb-time-picker.js';
+export * from './web-component/dist/jb-time-picker.js';
