@@ -133,6 +133,7 @@ export const Gallery: Story = {
   ),
 };
 
+export const Default: Story = { name: "Default", render: () => <TimePickerStyleSample className="" focus="hour" /> };
 export const Carbon: Story = { name: "Carbon", render: () => <TimePickerStyleSample className="carbon-style" focus="hour" /> };
 export const Aurora: Story = { name: "Aurora", render: () => <TimePickerStyleSample className="aurora-style" focus="minute" /> };
 export const Forest: Story = { name: "Forest", render: () => <TimePickerStyleSample className="forest-style" focus="second" /> };
