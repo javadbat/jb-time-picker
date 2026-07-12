@@ -40,6 +40,7 @@ export class JBTimePickerWebComponent extends HTMLElement {
   focusedTimeUnit: TimeUnits | null = null;
   #grabbedElement: GrabbedElement | null = null;
   #isInitialized = false;
+  #internals?: ElementInternals;
   // to show 01 instead of 1 in picker
   get frontalZero() {
     return this.#frontalZero;
@@ -113,6 +114,8 @@ export class JBTimePickerWebComponent extends HTMLElement {
   set secondEnabled(value) {
     if (typeof value == "boolean") {
       this.#secondEnabled = value;
+      this.#setState("second-enabled", value);
+      this.#setState("second-disabled", !value);
       if (value == false) {
         this.#disableSecond();
       } else {
@@ -136,6 +139,9 @@ export class JBTimePickerWebComponent extends HTMLElement {
   textWidth: number | null = null
   constructor() {
     super();
+    if (typeof this.attachInternals === "function") {
+      this.#internals = this.attachInternals();
+    }
     this.#initWebComponent();
   }
   connectedCallback() {
@@ -1036,6 +1042,7 @@ export class JBTimePickerWebComponent extends HTMLElement {
     const x = this.#defaultPositions[timeUnit + "TextX"];
     const textElem = document.createElementNS(xmlns, "text");
     textElem.classList.add(`${timeUnit}-text`, "time-text");
+    (textElem as any).part.add("time-text", `${timeUnit}-text`, `${timeStep}-text`);
     textElem.setAttributeNS(null, "dominant-baseline", "middle");
     if (this.textWidth) {
       textElem.setAttributeNS(null, "textLength", this.textWidth.toString());
@@ -1091,6 +1098,9 @@ export class JBTimePickerWebComponent extends HTMLElement {
     if (timeUnit != this.focusedTimeUnit) {
       const oldFocusedTimeUnit = this.focusedTimeUnit;
       this.focusedTimeUnit = timeUnit;
+      this.#setState("hour-focused", timeUnit === "hour");
+      this.#setState("minute-focused", timeUnit === "minute");
+      this.#setState("second-focused", timeUnit === "second");
       if (timeUnit) {
         //set new focus DOM class
         this.elements.currentTime[timeUnit]!.classList.add("--focused");
@@ -1138,6 +1148,14 @@ export class JBTimePickerWebComponent extends HTMLElement {
           "--focused"
         );
       }
+    }
+  }
+  #setState(state: string, isActive: boolean) {
+    const states = (this.#internals as any)?.states;
+    if (isActive) {
+      states?.add(state);
+    } else {
+      states?.delete(state);
     }
   }
   /**

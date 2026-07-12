@@ -1,12 +1,32 @@
-:host{
-  --hour-color:var(--jb-time-picker-hour-color, var(--jb-primary));
-  --minute-color:var(--jb-time-picker-minute-color, var(--jb-secondary));
-  --second-color:var(--jb-time-picker-second-color, var(--jb-highlight));
-  --outer-circle-color:var(--jb-time-picker-outer-circle-color, var(--jb-neutral-9));
-  --separator-text-color:var(--jb-time-picker-separator-text-color, var(--jb-neutral-8));
-  --indicator-color:var(--jb-time-picker-indicator-color, var(--jb-neutral-8));
+:host {
+  /* Size */
+  --width: var(--jb-time-picker-width, 17rem);
+  --height: var(--jb-time-picker-height, 17rem);
+  --clock-padding: var(--jb-time-picker-clock-padding, 1rem);
+  --time-text-font-size: var(--jb-time-picker-time-text-font-size, 9.375rem);
+  --separator-text-font-size: var(--jb-time-picker-separator-text-font-size, var(--time-text-font-size));
+  --hour-indicator-size: var(--jb-time-picker-hour-indicator-size, 50px);
+  --minute-indicator-size: var(--jb-time-picker-minute-indicator-size, 40px);
+  --second-indicator-size: var(--jb-time-picker-second-indicator-size, 30px);
+
+  /* Theme/Color */
+  --hour-color: var(--jb-time-picker-hour-color, var(--jb-primary));
+  --minute-color: var(--jb-time-picker-minute-color, var(--jb-secondary));
+  --second-color: var(--jb-time-picker-second-color, var(--jb-highlight));
+  --outer-circle-color: var(--jb-time-picker-outer-circle-color, var(--jb-neutral-9));
+  --inner-circle-color: var(--jb-time-picker-inner-circle-color, var(--jb-white));
+  --separator-text-color: var(--jb-time-picker-separator-text-color, var(--jb-neutral-8));
+  --indicator-color: var(--jb-time-picker-indicator-color, var(--jb-neutral-8));
   --prev-text-color: var(--jb-time-picker-prev-text-color, var(--jb-text-secondary));
   --current-text-color: var(--jb-time-picker-current-text-color, var(--jb-text-primary));
   --next-text-color: var(--jb-time-picker-next-text-color, var(--jb-text-secondary));
-  --inner-circle-color: var(--jb-time-picker-inner-circle-color, var(--jb-white))
+
+  /* Other */
+  --box-shadow: var(--jb-time-picker-box-shadow, none);
+  --clock-filter: var(--jb-time-picker-clock-filter, none);
+  --time-text-font-family: var(--jb-time-picker-time-text-font-family, inherit);
+  --time-text-font-weight: var(--jb-time-picker-time-text-font-weight, 400);
+  --time-text-cursor: var(--jb-time-picker-time-text-cursor, pointer);
+  --optional-text-opacity: var(--jb-time-picker-optional-text-opacity, 0.6);
+  --wrapper-border-radius: var(--jb-time-picker-wrapper-border-radius, 50%);
 }

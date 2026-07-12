@@ -1,0 +1,256 @@
+import { Meta, Source, Story, Title } from '@storybook/addon-docs/blocks';
+import * as StyleStories from './Styles.stories';
+import antDesignThemeCss from '../../../docs/styles/ant-design.css?raw';
+import auroraThemeCss from '../../../docs/styles/aurora.css?raw';
+import bootstrapThemeCss from '../../../docs/styles/bootstrap.css?raw';
+import candyThemeCss from '../../../docs/styles/candy.css?raw';
+import carbonThemeCss from '../../../docs/styles/carbon.css?raw';
+import cupertinoThemeCss from '../../../docs/styles/cupertino.css?raw';
+import fluentThemeCss from '../../../docs/styles/fluent.css?raw';
+import forestThemeCss from '../../../docs/styles/forest.css?raw';
+import materialThemeCss from '../../../docs/styles/material.css?raw';
+import porcelainThemeCss from '../../../docs/styles/porcelain.css?raw';
+import sunsetThemeCss from '../../../docs/styles/sunset.css?raw';
+import terminalThemeCss from '../../../docs/styles/terminal.css?raw';
+import antDesignTimePickerCss from './styles/style-ant-design.css?raw';
+import auroraTimePickerCss from './styles/style-aurora.css?raw';
+import bootstrapTimePickerCss from './styles/style-bootstrap.css?raw';
+import candyTimePickerCss from './styles/style-candy.css?raw';
+import carbonTimePickerCss from './styles/style-carbon.css?raw';
+import cupertinoTimePickerCss from './styles/style-cupertino.css?raw';
+import fluentTimePickerCss from './styles/style-fluent.css?raw';
+import forestTimePickerCss from './styles/style-forest.css?raw';
+import materialTimePickerCss from './styles/style-material.css?raw';
+import porcelainTimePickerCss from './styles/style-porcelain.css?raw';
+import sunsetTimePickerCss from './styles/style-sunset.css?raw';
+import terminalTimePickerCss from './styles/style-terminal.css?raw';
+
+<Meta title="Components/form elements/JBTimePicker/Styling" />
+
+<Title>Styling</Title>
+
+`JBTimePicker` is an SVG-based wheel picker. Use common design tokens for page-level consistency, `--jb-time-picker-*` variables for the stable clock API, and CSS parts for official SVG surfaces such as circles, indicators, and generated time text.
+
+## Live Gallery
+
+<Story of={StyleStories.Gallery} />
+
+<Source of={StyleStories.Gallery} />
+
+## Common Design Tokens
+
+Use the core theme docs as the source of truth for shared design-system variables:
+
+- [Theme Colors](../../jb-core/theme/stories/colors.mdx) explains the general color palette variables, default colors, customization approaches, and color generation helpers.
+- [Theme Sizes](../../jb-core/theme/stories/sizes.mdx) explains shared size and radius variables.
+- [Theme Custom Galleries](https://javadbat.github.io/design-system/?path=/docs/theme-custom-material--docs) gathers the shared custom style recipes across components.
+
+Time picker recipes should use those common tokens where possible, then map them into `--jb-time-picker-*` variables only where the picker needs a component-specific value.
+
+## Styling Model
+
+Use three layers when styling time picker examples:
+
+- Common design tokens are documented in [Theme Colors](../../jb-core/theme/stories/colors.mdx) and [Theme Sizes](../../jb-core/theme/stories/sizes.mdx).
+- Reusable example theme packs live in [`docs/styles`](https://github.com/javadbat/design-system/tree/main/docs/styles) and can be shared across components.
+- Component recipe files live in [`modules/jb-time-picker/stories/styles`](https://github.com/javadbat/design-system/tree/main/modules/jb-time-picker/stories/styles).
+- Public component variables use the `--jb-time-picker-*` prefix and are the stable styling API.
+
+Each example uses one shared example theme pack from [`docs/styles`](https://github.com/javadbat/design-system/tree/main/docs/styles) and one time-picker-specific recipe from [`modules/jb-time-picker/stories/styles`](https://github.com/javadbat/design-system/tree/main/modules/jb-time-picker/stories/styles). The style story applies both classes directly to `JBTimePicker`.
+
+## Recommended Customization Path
+
+1. Use `--jb-time-picker-*` variables first for size, clock colors, text, indicators, shadow, and SVG filters.
+2. Use common theme variables from [Theme Colors](../../jb-core/theme/stories/colors.mdx) and [Theme Sizes](../../jb-core/theme/stories/sizes.mdx) when the style should align with the design system.
+3. Put reusable theme-pack values in [`docs/styles`](https://github.com/javadbat/design-system/tree/main/docs/styles) only when they should be shared by multiple component demos.
+4. Use `::part(...)` for official exposed SVG surfaces such as `::part(clock)`, `::part(outer-circle)`, `::part(inner-circle)`, `::part(time-text)`, and unit-specific text parts.
+5. Use custom states for focused-unit and second visibility styling.
+6. Add a new component variable only when a needed SVG value cannot be expressed with the current public variables or official parts.
+
+## Parts And States
+
+<table>
+  <thead>
+    <tr><th>Part</th><th>Element</th><th>Notes</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>wrapper</code></td><td>Root shadow wrapper</td><td>Use for wrapper-level size and effects.</td></tr>
+    <tr><td><code>clock</code></td><td>SVG clock element</td><td>Use for whole-clock SVG effects.</td></tr>
+    <tr><td><code>outer-circle</code></td><td>Outer SVG circle</td><td>Use for the outer clock surface.</td></tr>
+    <tr><td><code>inner-circle</code></td><td>Inner SVG circle</td><td>Use for the inner clock surface.</td></tr>
+    <tr><td><code>time-indicators</code></td><td>Indicator group</td><td>Use for group-level indicator effects.</td></tr>
+    <tr><td><code>time-text</code></td><td>Generated SVG time text</td><td>Targets all generated hour, minute, and second text nodes.</td></tr>
+    <tr><td><code>hour-text</code></td><td>Generated hour text</td><td>Use for hour-specific text styling.</td></tr>
+    <tr><td><code>minute-text</code></td><td>Generated minute text</td><td>Use for minute-specific text styling.</td></tr>
+    <tr><td><code>second-text</code></td><td>Generated second text</td><td>Use for second-specific text styling.</td></tr>
+    <tr><td><code>currentTime-text</code></td><td>Current row text</td><td>Use for selected row text styling.</td></tr>
+    <tr><td><code>prevTime-text</code></td><td>Previous row text</td><td>Use for previous row text styling.</td></tr>
+    <tr><td><code>nextTime-text</code></td><td>Next row text</td><td>Use for next row text styling.</td></tr>
+    <tr><td><code>substitutePrevTime-text</code></td><td>Far previous row text</td><td>Use for masked scrolling text styling.</td></tr>
+    <tr><td><code>substituteNextTime-text</code></td><td>Far next row text</td><td>Use for masked scrolling text styling.</td></tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr><th>Custom State</th><th>Meaning</th><th>Example Selector</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>hour-focused</code></td><td>Applied when the hour unit is focused.</td><td><code>jb-time-picker:state(hour-focused)::part(hour-text)</code></td></tr>
+    <tr><td><code>minute-focused</code></td><td>Applied when the minute unit is focused.</td><td><code>jb-time-picker:state(minute-focused)::part(minute-text)</code></td></tr>
+    <tr><td><code>second-focused</code></td><td>Applied when the second unit is focused.</td><td><code>jb-time-picker:state(second-focused)::part(second-text)</code></td></tr>
+    <tr><td><code>second-enabled</code></td><td>Applied when seconds are visible.</td><td><code>jb-time-picker:state(second-enabled)::part(clock)</code></td></tr>
+    <tr><td><code>second-disabled</code></td><td>Applied when seconds are hidden.</td><td><code>jb-time-picker:state(second-disabled)::part(clock)</code></td></tr>
+  </tbody>
+</table>
+
+## CSS Variables
+
+<table>
+  <thead>
+    <tr><th>Variable</th><th>Category</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>--jb-time-picker-width</code></td><td>Size</td><td>Picker wrapper width.</td></tr>
+    <tr><td><code>--jb-time-picker-height</code></td><td>Size</td><td>Picker wrapper height.</td></tr>
+    <tr><td><code>--jb-time-picker-clock-padding</code></td><td>Size</td><td>Padding around the SVG clock.</td></tr>
+    <tr><td><code>--jb-time-picker-time-text-font-size</code></td><td>Size</td><td>Generated time text font size.</td></tr>
+    <tr><td><code>--jb-time-picker-separator-text-font-size</code></td><td>Size</td><td>Separator font size.</td></tr>
+    <tr><td><code>--jb-time-picker-hour-indicator-size</code></td><td>Size</td><td>Hour indicator circle radius.</td></tr>
+    <tr><td><code>--jb-time-picker-minute-indicator-size</code></td><td>Size</td><td>Minute indicator circle radius.</td></tr>
+    <tr><td><code>--jb-time-picker-second-indicator-size</code></td><td>Size</td><td>Second indicator circle radius.</td></tr>
+    <tr><td><code>--jb-time-picker-hour-color</code></td><td>Theme/Color</td><td>Focused hour text and indicator color.</td></tr>
+    <tr><td><code>--jb-time-picker-minute-color</code></td><td>Theme/Color</td><td>Focused minute text and indicator color.</td></tr>
+    <tr><td><code>--jb-time-picker-second-color</code></td><td>Theme/Color</td><td>Focused second text and indicator color.</td></tr>
+    <tr><td><code>--jb-time-picker-outer-circle-color</code></td><td>Theme/Color</td><td>Outer clock circle color.</td></tr>
+    <tr><td><code>--jb-time-picker-inner-circle-color</code></td><td>Theme/Color</td><td>Inner clock circle color.</td></tr>
+    <tr><td><code>--jb-time-picker-separator-text-color</code></td><td>Theme/Color</td><td>Separator text color.</td></tr>
+    <tr><td><code>--jb-time-picker-indicator-color</code></td><td>Theme/Color</td><td>Default indicator color.</td></tr>
+    <tr><td><code>--jb-time-picker-prev-text-color</code></td><td>Theme/Color</td><td>Previous value text color.</td></tr>
+    <tr><td><code>--jb-time-picker-current-text-color</code></td><td>Theme/Color</td><td>Current value text color.</td></tr>
+    <tr><td><code>--jb-time-picker-next-text-color</code></td><td>Theme/Color</td><td>Next value text color.</td></tr>
+    <tr><td><code>--jb-time-picker-box-shadow</code></td><td>Other</td><td>Wrapper shadow.</td></tr>
+    <tr><td><code>--jb-time-picker-clock-filter</code></td><td>Other</td><td>SVG clock filter.</td></tr>
+    <tr><td><code>--jb-time-picker-time-text-font-family</code></td><td>Other</td><td>Generated time text font family.</td></tr>
+    <tr><td><code>--jb-time-picker-time-text-font-weight</code></td><td>Other</td><td>Generated time text font weight.</td></tr>
+    <tr><td><code>--jb-time-picker-time-text-cursor</code></td><td>Other</td><td>Generated time text cursor.</td></tr>
+    <tr><td><code>--jb-time-picker-optional-text-opacity</code></td><td>Other</td><td>Optional unit text opacity.</td></tr>
+    <tr><td><code>--jb-time-picker-wrapper-border-radius</code></td><td>Other</td><td>Root wrapper border radius.</td></tr>
+  </tbody>
+</table>
+
+## Style Recipes
+
+### Carbon
+<Story of={StyleStories.Carbon} />
+<Source of={StyleStories.Carbon} />
+Shared style:
+<Source code={carbonThemeCss} language="css" />
+Time picker style:
+<Source code={carbonTimePickerCss} language="css" />
+
+### Aurora
+<Story of={StyleStories.Aurora} />
+<Source of={StyleStories.Aurora} />
+Shared style:
+<Source code={auroraThemeCss} language="css" />
+Time picker style:
+<Source code={auroraTimePickerCss} language="css" />
+
+### Forest
+<Story of={StyleStories.Forest} />
+<Source of={StyleStories.Forest} />
+Shared style:
+<Source code={forestThemeCss} language="css" />
+Time picker style:
+<Source code={forestTimePickerCss} language="css" />
+
+### Sunset
+<Story of={StyleStories.Sunset} />
+<Source of={StyleStories.Sunset} />
+Shared style:
+<Source code={sunsetThemeCss} language="css" />
+Time picker style:
+<Source code={sunsetTimePickerCss} language="css" />
+
+### Porcelain
+<Story of={StyleStories.Porcelain} />
+<Source of={StyleStories.Porcelain} />
+Shared style:
+<Source code={porcelainThemeCss} language="css" />
+Time picker style:
+<Source code={porcelainTimePickerCss} language="css" />
+
+### Candy
+<Story of={StyleStories.Candy} />
+<Source of={StyleStories.Candy} />
+Shared style:
+<Source code={candyThemeCss} language="css" />
+Time picker style:
+<Source code={candyTimePickerCss} language="css" />
+
+### Terminal
+<Story of={StyleStories.Terminal} />
+<Source of={StyleStories.Terminal} />
+Shared style:
+<Source code={terminalThemeCss} language="css" />
+Time picker style:
+<Source code={terminalTimePickerCss} language="css" />
+
+### Material
+<Story of={StyleStories.Material} />
+<Source of={StyleStories.Material} />
+Shared style:
+<Source code={materialThemeCss} language="css" />
+Time picker style:
+<Source code={materialTimePickerCss} language="css" />
+
+### Fluent
+<Story of={StyleStories.Fluent} />
+<Source of={StyleStories.Fluent} />
+Shared style:
+<Source code={fluentThemeCss} language="css" />
+Time picker style:
+<Source code={fluentTimePickerCss} language="css" />
+
+### Bootstrap
+<Story of={StyleStories.Bootstrap} />
+<Source of={StyleStories.Bootstrap} />
+Shared style:
+<Source code={bootstrapThemeCss} language="css" />
+Time picker style:
+<Source code={bootstrapTimePickerCss} language="css" />
+
+### Cupertino
+<Story of={StyleStories.Cupertino} />
+<Source of={StyleStories.Cupertino} />
+Shared style:
+<Source code={cupertinoThemeCss} language="css" />
+Time picker style:
+<Source code={cupertinoTimePickerCss} language="css" />
+
+### Ant Design
+<Story of={StyleStories.AntDesign} />
+<Source of={StyleStories.AntDesign} />
+Shared style:
+<Source code={antDesignThemeCss} language="css" />
+Time picker style:
+<Source code={antDesignTimePickerCss} language="css" />
+
+## Theme File Pattern
+
+Use [Theme Colors](../../jb-core/theme/stories/colors.mdx) and [Theme Sizes](../../jb-core/theme/stories/sizes.mdx) as the common design-token guides. Theme-pack files should keep reusable demo variables in [`docs/styles`](https://github.com/javadbat/design-system/tree/main/docs/styles), then each component should keep its own style CSS in its story [`styles`](https://github.com/javadbat/design-system/tree/main/modules/jb-time-picker/stories/styles) folder.
+
+```css
+/* https://github.com/javadbat/design-system/blob/main/docs/styles/carbon.css */
+.theme-name-style {
+  /* shared design-system variables */
+}
+
+/* https://github.com/javadbat/design-system/blob/main/modules/jb-time-picker/stories/styles/style-carbon.css */
+.theme-name-time-picker {
+  /* time-picker-specific variables and official parts */
+}
+```
+
+This keeps common theme tokens reusable and lets each component page show only the CSS it needs.

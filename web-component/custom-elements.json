@@ -172,9 +172,99 @@
             {
               "name": "time-indicators",
               "description": "Wrapper around hour, minute, and second indicators."
+            },
+            {
+              "name": "time-text",
+              "description": "Generated SVG time text."
+            },
+            {
+              "name": "hour-text",
+              "description": "Generated hour text."
+            },
+            {
+              "name": "minute-text",
+              "description": "Generated minute text."
+            },
+            {
+              "name": "second-text",
+              "description": "Generated second text."
+            },
+            {
+              "name": "currentTime-text",
+              "description": "Generated current row text."
+            },
+            {
+              "name": "prevTime-text",
+              "description": "Generated previous row text."
+            },
+            {
+              "name": "nextTime-text",
+              "description": "Generated next row text."
+            },
+            {
+              "name": "substitutePrevTime-text",
+              "description": "Generated far previous row text."
+            },
+            {
+              "name": "substituteNextTime-text",
+              "description": "Generated far next row text."
+            }
+          ],
+          "cssStates": [
+            {
+              "name": "hour-focused",
+              "description": "Applied when the hour unit is focused."
+            },
+            {
+              "name": "minute-focused",
+              "description": "Applied when the minute unit is focused."
+            },
+            {
+              "name": "second-focused",
+              "description": "Applied when the second unit is focused."
+            },
+            {
+              "name": "second-enabled",
+              "description": "Applied when seconds are visible."
+            },
+            {
+              "name": "second-disabled",
+              "description": "Applied when seconds are hidden."
             }
           ],
           "cssProperties": [
+            {
+              "name": "--jb-time-picker-width",
+              "description": "Picker wrapper width."
+            },
+            {
+              "name": "--jb-time-picker-height",
+              "description": "Picker wrapper height."
+            },
+            {
+              "name": "--jb-time-picker-clock-padding",
+              "description": "Padding around the SVG clock."
+            },
+            {
+              "name": "--jb-time-picker-time-text-font-size",
+              "description": "Generated time text font size."
+            },
+            {
+              "name": "--jb-time-picker-separator-text-font-size",
+              "description": "Separator text font size."
+            },
+            {
+              "name": "--jb-time-picker-hour-indicator-size",
+              "description": "Hour indicator circle radius."
+            },
+            {
+              "name": "--jb-time-picker-minute-indicator-size",
+              "description": "Minute indicator circle radius."
+            },
+            {
+              "name": "--jb-time-picker-second-indicator-size",
+              "description": "Second indicator circle radius."
+            },
             {
               "name": "--jb-time-picker-hour-color",
               "description": "Focused hour text and indicator color."
@@ -214,6 +304,34 @@
             {
               "name": "--jb-time-picker-next-text-color",
               "description": "Next value text color."
+            },
+            {
+              "name": "--jb-time-picker-box-shadow",
+              "description": "Wrapper shadow."
+            },
+            {
+              "name": "--jb-time-picker-clock-filter",
+              "description": "SVG clock filter."
+            },
+            {
+              "name": "--jb-time-picker-time-text-font-family",
+              "description": "Generated time text font family."
+            },
+            {
+              "name": "--jb-time-picker-time-text-font-weight",
+              "description": "Generated time text font weight."
+            },
+            {
+              "name": "--jb-time-picker-time-text-cursor",
+              "description": "Generated time text cursor."
+            },
+            {
+              "name": "--jb-time-picker-optional-text-opacity",
+              "description": "Optional unit text opacity."
+            },
+            {
+              "name": "--jb-time-picker-wrapper-border-radius",
+              "description": "Root wrapper border radius."
             }
           ]
         }

@@ -153,26 +153,7 @@ timePicker.textWidth = 150;
 
 ## CSS parts and variables
 
-| part | description |
-| --- | --- |
-| `wrapper` | Root wrapper inside the shadow DOM. |
-| `clock` | SVG clock element. |
-| `outer-circle` | Outer SVG circle. |
-| `inner-circle` | Inner SVG circle. |
-| `time-indicators` | Wrapper around hour, minute, and second indicators. |
-
-| CSS variable name | description |
-| --- | --- |
-| `--jb-time-picker-hour-color` | Focused hour text and indicator color. |
-| `--jb-time-picker-minute-color` | Focused minute text and indicator color. |
-| `--jb-time-picker-second-color` | Focused second text and indicator color. |
-| `--jb-time-picker-outer-circle-color` | Outer clock circle color. |
-| `--jb-time-picker-inner-circle-color` | Inner clock circle color. |
-| `--jb-time-picker-separator-text-color` | Separator text color. |
-| `--jb-time-picker-indicator-color` | Default indicator color. |
-| `--jb-time-picker-prev-text-color` | Previous value text color. |
-| `--jb-time-picker-current-text-color` | Current value text color. |
-| `--jb-time-picker-next-text-color` | Next value text color. |
+For complete styling guidance, live examples, official parts, custom states, and copyable style recipes, see [Styling](https://javadbat.github.io/design-system/?path=/docs/components-form-elements-jbtimepicker-styling).
 
 ```css
 jb-time-picker {

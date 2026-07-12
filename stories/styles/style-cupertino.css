@@ -1,0 +1,22 @@
+jb-time-input.cupertino-style::part(time-picker),
+jb-time-picker.cupertino-style {
+    --jb-time-picker-width: 12rem;
+    --jb-time-picker-height: 12rem;
+    --jb-time-picker-clock-padding: 0.65rem;
+    --jb-time-picker-outer-circle-color: #f5f5f7;
+    --jb-time-picker-inner-circle-color: var(--jb-text-contrast);
+    --jb-time-picker-hour-color: var(--jb-focus-color);
+    --jb-time-picker-minute-color: #34c759;
+    --jb-time-picker-second-color: var(--jb-success);
+    --jb-time-picker-separator-text-color: #86868b;
+    --jb-time-picker-indicator-color: #d2d2d7;
+    --jb-time-picker-prev-text-color: #86868b;
+    --jb-time-picker-current-text-color: var(--jb-text-primary);
+    --jb-time-picker-next-text-color: #86868b;
+    --jb-time-picker-box-shadow: 0 0.6rem 1.35rem rgb(0 0 0 / 0.12);
+}
+
+jb-time-input.cupertino-style::part(clock),
+jb-time-picker.cupertino-style::part(clock) {
+    filter: drop-shadow(0 0.125rem 0.25rem rgb(0 0 0 / 0.08));
+}

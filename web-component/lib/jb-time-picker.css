@@ -1,12 +1,15 @@
 .jb-time-picker-web-component {
-    width: 17rem;
-    height: 17rem;
+    width: var(--width);
+    height: var(--height);
+    border-radius: var(--wrapper-border-radius);
+    box-shadow: var(--box-shadow);
     .svg-clock-wrapper {
-        padding: 1rem;
+        padding: var(--clock-padding);
         .svg-clock {
             width: 100%;
             height: 100%;
             overflow: visible;
+            filter: var(--clock-filter);
             .outer-circle {
                 fill: var(--outer-circle-color);
             }
@@ -17,15 +20,17 @@
 
             .time-text-wrapper {
                 .time-text {
-                    font-size: 9.375rem;
+                    font-family: var(--time-text-font-family);
+                    font-size: var(--time-text-font-size);
+                    font-weight: var(--time-text-font-weight);
                     text-anchor: middle;
-                    cursor: pointer;
+                    cursor: var(--time-text-cursor);
                     user-select: none;
                     &.--hidden {
                         display: none;
                     }
                     &.--optional{
-                        opacity: 0.6;
+                        opacity: var(--optional-text-opacity);
                     }
                 }
 
@@ -49,7 +54,9 @@
                     }
 
                     .separator-text {
-                        font-size: 9.375rem;
+                        font-family: var(--time-text-font-family);
+                        font-size: var(--separator-text-font-size);
+                        font-weight: var(--time-text-font-weight);
                         text-anchor: middle;
                         fill: var(--separator-text-color);
                         user-select: none;
@@ -74,6 +81,18 @@
 
             .time-indicators {
                 fill: var(--indicator-color);
+
+                .hour-symbol {
+                    r: var(--hour-indicator-size);
+                }
+
+                .minute-symbol {
+                    r: var(--minute-indicator-size);
+                }
+
+                .second-symbol {
+                    r: var(--second-indicator-size);
+                }
 
                 .hour-indicator {
                     display: none;

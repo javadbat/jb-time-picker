@@ -1,0 +1,25 @@
+jb-time-input.terminal-style::part(time-picker),
+jb-time-picker.terminal-style {
+    --jb-time-picker-width: 12rem;
+    --jb-time-picker-height: 12rem;
+    --jb-time-picker-clock-padding: 0.65rem;
+    --jb-time-picker-outer-circle-color: #001d12;
+    --jb-time-picker-inner-circle-color: var(--jb-surface);
+    --jb-time-picker-hour-color: var(--jb-focus-color);
+    --jb-time-picker-minute-color: #5eead4;
+    --jb-time-picker-second-color: #ff5f56;
+    --jb-time-picker-separator-text-color: var(--jb-text-secondary);
+    --jb-time-picker-indicator-color: var(--jb-border-color);
+    --jb-time-picker-prev-text-color: var(--jb-text-disabled);
+    --jb-time-picker-current-text-color: var(--jb-focus-color);
+    --jb-time-picker-next-text-color: var(--jb-text-disabled);
+    --jb-time-picker-time-text-font-family: Consolas, "Courier New", monospace;
+    --jb-time-picker-time-text-font-weight: 700;
+    --jb-time-picker-clock-filter: drop-shadow(0 0 0.45rem rgb(98 255 147 / 0.22));
+}
+
+jb-time-input.terminal-style::part(outer-circle),
+jb-time-picker.terminal-style::part(outer-circle) {
+    stroke: var(--jb-focus-color);
+    stroke-width: 4px;
+}
