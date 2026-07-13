@@ -1,3 +1,8 @@
+:host(:focus-visible) {
+    outline: 2px solid var(--jb-time-picker-focus-ring-color, Highlight);
+    outline-offset: 2px;
+}
+
 .jb-time-picker-web-component {
     width: var(--width);
     height: var(--height);

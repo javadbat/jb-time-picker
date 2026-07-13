@@ -5,6 +5,7 @@ import type { AnimationHandler, DefaultPositions, GrabbedElement, JBTimeInputEle
 import { enToFaDigits } from "jb-core";
 import { registerDefaultVariables } from 'jb-core/theme';
 import { i18n } from 'jb-core/i18n';
+import { dictionary } from "./i18n";
 
 export * from "./types.js";
 
@@ -141,6 +142,8 @@ export class JBTimePickerWebComponent extends HTMLElement {
     super();
     if (typeof this.attachInternals === "function") {
       this.#internals = this.attachInternals();
+      this.#internals.role = "group";
+      this.#internals.ariaLabel = dictionary.get(i18n, "timePicker");
     }
     this.#initWebComponent();
   }
@@ -1211,6 +1214,10 @@ export class JBTimePickerWebComponent extends HTMLElement {
           this.#animationHandler[timeUnit].isTextAnimationPlaying = false;
           isOnFinishedExecuted = true;
           this.#value[timeUnit] = this.#value[timeUnit]! + direction;
+          if (this.#internals) {
+            const { hour, minute, second } = this.value;
+            this.#internals.ariaDescription = second === undefined ? `${hour}:${minute}` : `${hour}:${minute}:${second}`;
+          }
           if (canTriggerOnChange) {
             this.#triggerOnChangeEvent();
           }
