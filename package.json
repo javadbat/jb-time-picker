@@ -22,10 +22,23 @@
     "README.md",
     "web-component/custom-elements.json",
     "web-component/lib/",
-    "web-component/dist/"
+    "web-component/dist/",
+    "react/",
+    "react/dist/"
   ],
   "main": "index.js",
   "types": "./web-component/dist/jb-time-picker.d.ts",
+  "exports": {
+    ".": {
+      "types": "./web-component/dist/jb-time-picker.d.ts",
+      "default": "./index.js"
+    },
+    "./react": {
+      "types": "./react/dist/JBTimePicker.d.ts",
+      "default": "./react/index.js"
+    },
+    "./*": "./*"
+  },
   "customElements": "web-component/custom-elements.json",
   "repository": {
     "type": "git",
