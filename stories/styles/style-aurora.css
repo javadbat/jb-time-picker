@@ -13,11 +13,11 @@ jb-time-picker.aurora-style {
     --jb-time-picker-prev-text-color: #8fb8d8;
     --jb-time-picker-current-text-color: var(--jb-text-primary);
     --jb-time-picker-next-text-color: #8fb8d8;
-    --jb-time-picker-box-shadow: 0 0.85rem 1.75rem rgb(45 212 191 / 0.18);
-    --jb-time-picker-clock-filter: drop-shadow(0 0 0.7rem rgb(125 228 211 / 0.24));
+    --jb-time-picker-box-shadow: 0 0.65rem 1.5rem rgb(45 212 191 / 0.14);
+    --jb-time-picker-clock-filter: drop-shadow(0 0 0.5rem rgb(125 228 211 / 0.16));
 }
 
 jb-time-input.aurora-style::part(picker-time-text),
 jb-time-picker.aurora-style::part(time-text) {
-    text-shadow: 0 0 0.75rem rgb(125 228 211 / 0.5);
+    text-shadow: 0 0 0.625rem rgb(125 228 211 / 0.34);
 }

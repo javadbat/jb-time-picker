@@ -13,10 +13,10 @@ jb-time-picker.candy-style {
     --jb-time-picker-prev-text-color: #be80a5;
     --jb-time-picker-current-text-color: #7a174a;
     --jb-time-picker-next-text-color: #be80a5;
-    --jb-time-picker-box-shadow: 0 0.85rem 1.75rem rgb(219 39 119 / 0.16);
+    --jb-time-picker-box-shadow: 0 0.65rem 1.4rem rgb(219 39 119 / 0.12);
 }
 
 jb-time-input.candy-style::part(clock),
 jb-time-picker.candy-style::part(clock) {
-    filter: drop-shadow(0 0.25rem 0.35rem rgb(219 39 119 / 0.18));
+    filter: drop-shadow(0 0.2rem 0.3rem rgb(219 39 119 / 0.12));
 }

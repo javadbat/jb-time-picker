@@ -1,19 +1,19 @@
 jb-time-input.carbon-style::part(time-picker),
 jb-time-picker.carbon-style {
-    --jb-time-picker-width: 12rem;
-    --jb-time-picker-height: 12rem;
+    --jb-time-picker-width: 10rem;
+    --jb-time-picker-height: 10rem;
     --jb-time-picker-clock-padding: 0.65rem;
     --jb-time-picker-outer-circle-color: #111111;
     --jb-time-picker-inner-circle-color: var(--jb-surface);
     --jb-time-picker-hour-color: var(--jb-primary);
-    --jb-time-picker-minute-color: var(--jb-success);
+    --jb-time-picker-minute-color: var(--jb-focus-color);
     --jb-time-picker-second-color: #fa4d56;
     --jb-time-picker-separator-text-color: #8d8d8d;
     --jb-time-picker-indicator-color: var(--jb-border-color);
     --jb-time-picker-prev-text-color: #8d8d8d;
     --jb-time-picker-current-text-color: var(--jb-text-primary);
     --jb-time-picker-next-text-color: #8d8d8d;
-    --jb-time-picker-box-shadow: 0 0.75rem 1.5rem rgb(0 0 0 / 0.28);
+    --jb-time-picker-box-shadow: inset 0 0 0 1px var(--jb-border-color);
 }
 
 jb-time-input.carbon-style::part(clock),
