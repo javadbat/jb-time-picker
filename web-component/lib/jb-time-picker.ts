@@ -453,20 +453,10 @@ export class JBTimePickerWebComponent extends HTMLElement {
     }
   }
   #registerEventListener() {
-    this.shadowRoot!.addEventListener("mousemove", (e) => {
-      this.#onMouseMove(e as MouseEvent);
-    });
-    this.elements.svgDOM.addEventListener("touchmove", (e) => {
-      this.#onTouchMove(e);
-    });
-    this.shadowRoot!.addEventListener(
-      "mouseup",
-      this.#handleTextMouseUp.bind(this)
-    );
-    this.elements.svgDOM.addEventListener(
-      "touchend",
-      this.#handleTextMouseUp.bind(this)
-    );
+    this.shadowRoot!.addEventListener("mousemove", (e) => {this.#onMouseMove(e as MouseEvent);}, {passive:true});
+    this.elements.svgDOM.addEventListener("touchmove", (e) => {this.#onTouchMove(e);},{passive:true});
+    this.shadowRoot!.addEventListener("mouseup",this.#handleTextMouseUp.bind(this),{passive:true});
+    this.elements.svgDOM.addEventListener("touchend",this.#handleTextMouseUp.bind(this),{passive:true});
   }
   #attachMouseDownEventToTimeTextDOM(timeUnit: TimeUnits, timeStep: TimeSteps) {
     //first we check if there is a bounded event we remove it
