@@ -40,6 +40,15 @@ export class JBTimePickerWebComponent extends HTMLElement {
   };
   focusedTimeUnit: TimeUnits | null = null;
   #grabbedElement: GrabbedElement | null = null;
+  // ID of the scheduled animation frame used to limit drag rendering to once per browser paint.
+  #dragAnimationFrame: number | null = null;
+  // Drag input collected between animation frames so no pointer or touch movement is lost.
+  #pendingDrag: {
+    // Most recent pointer or touch position on the page's Y axis.
+    currentYPos: number;
+    // Sum of the Y movement reported by all events received before the next frame.
+    movementY: number;
+  } | null = null;
   #isInitialized = false;
   #internals?: ElementInternals;
   // to show 01 instead of 1 in picker
@@ -90,23 +99,42 @@ export class JBTimePickerWebComponent extends HTMLElement {
     if (typeof value.second === "number") {
       normalizedValue.second = this.#normalizeTimeUnitValue(value.second, this.#value.second ?? 0, "second");
     }
+    const nextValue = { ...this.#value, ...normalizedValue };
     if (!this.#animationHandler) {
-      this.#value = { ...this.#value, ...normalizedValue };
+      this.#value = nextValue;
       return;
     }
-    this.#setUnitValue(normalizedValue.hour, "hour");
-    this.#setUnitValue(normalizedValue.minute, "minute");
-    if (typeof normalizedValue.second === "number") {
-      this.#setUnitValue(normalizedValue.second, "second");
+    const hasValueChanged =
+      nextValue.hour !== this.#value.hour ||
+      nextValue.minute !== this.#value.minute ||
+      nextValue.second !== this.#value.second;
+    if (!hasValueChanged) {
+      return;
+    }
+    // A public value assignment represents completed external state. Apply it in one update
+    // instead of creating an animation for every intermediate numeric value.
+    this.#cancelTextAnimations();
+    this.#value = nextValue;
+    this.#initTimeTextNodes();
+    this.#initTimeUnitIndicator();
+    this.#updateAriaDescription();
+  }
+  #cancelTextAnimations() {
+    // Cancel every unit because rebuilding the shared text rows replaces all of their nodes.
+    // Clearing the handlers prevents an old animation from changing the newly assigned value.
+    for (const timeUnit of Object.values(TimeUnitsObj)) {
+      this.#animationHandler[timeUnit].isTextAnimationPlaying = false;
+      this.#animationHandler[timeUnit].waitingAction = null;
+      for (const timeStep of Object.values(TimeStepsObj) as TimeSteps[]) {
+        const element = this.elements[timeStep][timeUnit];
+        element?.getAnimations().forEach((animation) => {animation.cancel()});
+      }
     }
   }
-  #setUnitValue(value: number, timeUnit: TimeUnitsString) {
-    if (!this.#animationHandler[timeUnit].isTextAnimationPlaying) {
-      this.#updateValue(value, timeUnit, false);
-    } else {
-      this.#animationHandler[timeUnit].waitingAction = () => {
-        this.#updateValue(value, timeUnit, false);
-      };
+  #updateAriaDescription() {
+    if (this.#internals) {
+      const { hour, minute, second } = this.value;
+      this.#internals.ariaDescription = second === undefined ? `${hour}:${minute}` : `${hour}:${minute}:${second}`;
     }
   }
   get secondEnabled() {
@@ -534,28 +562,9 @@ export class JBTimePickerWebComponent extends HTMLElement {
       },
       //y diffrent between two time step
       timeStepYDiff: 150,
-      //zarib tabdil dom pos -> svg pos
-      get svgPosScale() {
-        return 1;
-      }, //define original func down there
+      // Converts DOM pixel movement to SVG units; refreshed when each drag starts.
+      svgPosScale: 1,
     };
-    //when we want to convert mouse movement or any other nonSvg scale coordination to svg scale one we use this function
-    //its defined as a getter function becuase it must be live and cant be stored becuase sometimes component created in js env not document or it created in hidden div or even user zoomin and zoomout page
-    // and all this action make scale wrong or undefined so we must get it every time we need it
-    Object.defineProperty(this.#defaultPositions, "svgPosScale", {
-      get: () => {
-        if (this.elements.timeIndicators?.hour) {
-          const ctm = this.elements.timeIndicators.hour.getCTM();
-          if (ctm && typeof ctm.inverse == "function") {
-            return ctm.inverse().a;
-          } else {
-            return 1;
-          }
-        } else {
-          return 1;
-        }
-      },
-    });
     /*
         this object define to handle events on animation playing.
         for example when minute value set from outside to 10 and before animation finished minute set to 30 we can handle it by set waitingAction to  serhour to 30 and when last animation iteration finished we start palying animation for 30
@@ -695,6 +704,11 @@ export class JBTimePickerWebComponent extends HTMLElement {
     if (!grabbedElement) {
       return;
     }
+    // Mouse and touch movement use DOM pixels, so convert them to SVG units. The component
+    // may be initialized while detached or hidden, and zooming can change its transform;
+    // therefore calculate the current scale at drag start, then cache it for that drag to
+    // avoid an expensive getCTM() layout read on every move event.
+    this.#defaultPositions.svgPosScale = this.#getSvgPosScale();
     this.#grabbedElement = {
       dom: grabbedElement,
       timeUnit: timeUnit,
@@ -749,7 +763,7 @@ export class JBTimePickerWebComponent extends HTMLElement {
   #onMouseMove(e: MouseEvent) {
     const currentYPos = e.pageY;
     const movementY = e.movementY;
-    this.#handleTextDrag(currentYPos, movementY);
+    this.#scheduleTextDrag(currentYPos, movementY);
   }
   /**
    *
@@ -765,8 +779,47 @@ export class JBTimePickerWebComponent extends HTMLElement {
       this.#grabbedElement.acc.prevTouchYPos = currentYPos;
       const movementY = currentYPos - prevTouchYPos;
       e.preventDefault();
-      this.#handleTextDrag(currentYPos, movementY);
+      this.#scheduleTextDrag(currentYPos, movementY);
     }
+  }
+  #getSvgPosScale() {
+    // Fall back to a 1:1 scale when the SVG has no current transformation matrix.
+    const ctm = this.elements.timeIndicators.hour.getCTM();
+    return ctm && typeof ctm.inverse === "function" ? ctm.inverse().a : 1;
+  }
+  #scheduleTextDrag(currentYPos: number, movementY: number) {
+    if (!this.#grabbedElement) {
+      return;
+    }
+    if (this.#pendingDrag) {
+      // Keep the latest absolute position and combine relative movement from skipped events.
+      this.#pendingDrag.currentYPos = currentYPos;
+      this.#pendingDrag.movementY += movementY;
+    } else {
+      this.#pendingDrag = { currentYPos, movementY };
+    }
+    if (this.#dragAnimationFrame === null) {
+      this.#dragAnimationFrame = requestAnimationFrame(() => {
+        this.#dragAnimationFrame = null;
+        this.#runPendingTextDrag();
+      });
+    }
+  }
+  #runPendingTextDrag() {
+    // Clear the queued data before processing so events raised during rendering form a new batch.
+    const pendingDrag = this.#pendingDrag;
+    this.#pendingDrag = null;
+    if (pendingDrag && this.#grabbedElement) {
+      this.#handleTextDrag(pendingDrag.currentYPos, pendingDrag.movementY);
+    }
+  }
+  #flushPendingTextDrag() {
+    // Apply the final queued movement synchronously before completing the drag.
+    if (this.#dragAnimationFrame !== null) {
+      cancelAnimationFrame(this.#dragAnimationFrame);
+      this.#dragAnimationFrame = null;
+    }
+    this.#runPendingTextDrag();
   }
   /**
    * handle text drag on touch move or mouse move
@@ -999,6 +1052,7 @@ export class JBTimePickerWebComponent extends HTMLElement {
     }
   }
   #handleTextMouseUp() {
+    this.#flushPendingTextDrag();
     if (this.#grabbedElement) {
       this.#handleUserBigSwipe();
       const timeUnit = this.#grabbedElement.timeUnit;
@@ -1204,10 +1258,7 @@ export class JBTimePickerWebComponent extends HTMLElement {
           this.#animationHandler[timeUnit].isTextAnimationPlaying = false;
           isOnFinishedExecuted = true;
           this.#value[timeUnit] = this.#value[timeUnit]! + direction;
-          if (this.#internals) {
-            const { hour, minute, second } = this.value;
-            this.#internals.ariaDescription = second === undefined ? `${hour}:${minute}` : `${hour}:${minute}:${second}`;
-          }
+          this.#updateAriaDescription();
           if (canTriggerOnChange) {
             this.#triggerOnChangeEvent();
           }

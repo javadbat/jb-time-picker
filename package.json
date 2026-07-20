@@ -14,7 +14,7 @@
     "time",
     "web component"
   ],
-  "version": "2.3.1",
+  "version": "2.4.0",
   "bugs": "https://github.com/javadbat/jb-time-picker/issues",
   "license": "MIT",
   "files": [
@@ -45,6 +45,6 @@
     "url": "git@github.com:javadbat/jb-time-picker.git"
   },
   "dependencies": {
-    "jb-core":"0.25.0"
+    "jb-core":"0.30.0"
   }
 }
