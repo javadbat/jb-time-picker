@@ -2,7 +2,7 @@ import CSS from "./jb-time-picker.css";
 import VariablesCSS from "./variables.css";
 import { renderHTML } from "./render";
 import type { AnimationHandler, DefaultPositions, GrabbedElement, JBTimeInputElements, JBTimePickerValueObject, TimeUnitsObject, TimeUnitsString, TimeUnits, TimeSteps } from "./types";
-import { enToFaDigits } from "jb-core";
+import { enToFaDigits, parseBooleanAttribute } from "jb-core";
 import { registerDefaultVariables } from 'jb-core/theme';
 import { i18n } from 'jb-core/i18n';
 import { dictionary } from "./i18n";
@@ -627,34 +627,22 @@ export class JBTimePickerWebComponent extends HTMLElement {
         break;
       }
       case "second-enabled":
-        this.secondEnabled = this.#parseBooleanAttribute(value, true);
+        this.secondEnabled = parseBooleanAttribute(value, true);
         break;
       case "frontal-zero":
-        this.frontalZero = this.#parseBooleanAttribute(value, false);
+        this.frontalZero = parseBooleanAttribute(value, false);
         break;
       case "optional-units":
         this.optionalUnits = this.#parseOptionalUnits(value);
         break;
       case "show-persian-number":
-        this.showPersianNumber = this.#parseBooleanAttribute(value, false);
+        this.showPersianNumber = parseBooleanAttribute(value, false);
         break;
       case "text-width":
         this.textWidth = value === null || value === "" || !Number.isFinite(Number(value)) ? null : Number(value);
         this.#initTimeTextNodes();
         break;
     }
-  }
-  #parseBooleanAttribute(value: string | null, defaultValue: boolean) {
-    if (value === null) {
-      return defaultValue;
-    }
-    if (value === "" || value.toLowerCase() === "true") {
-      return true;
-    }
-    if (value.toLowerCase() === "false") {
-      return false;
-    }
-    return Boolean(value);
   }
   #parseOptionalUnits(value: string | null) {
     if (!value) {
