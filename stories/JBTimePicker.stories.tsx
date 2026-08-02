@@ -135,8 +135,44 @@ export const OptionalMinute: Story = {
   },
 };
 
+export const FocusedUnit: Story = {
+  args: {
+    value: { hour: 9, minute: 24, second: 36 },
+  },
+  play: async ({ canvasElement }) => {
+    const timePicker = getTimePicker(canvasElement);
+
+    await waitForTimeValue(timePicker, { hour: 9, minute: 24, second: 36 });
+    timePicker.setTimeUnitFocus('minute');
+
+    await waitFor(() => {
+      expect(timePicker.focusedTimeUnit).toBe('minute');
+      expect(getTimeText(timePicker, 'minute', 'currentTime').classList.contains('--focused')).toBe(true);
+    });
+  },
+};
+
+export const TextWidth: Story = {
+  args: {
+    value: { hour: 8, minute: 8, second: 8 },
+    frontalZero: true,
+    textWidth: 200,
+  },
+  play: async ({ canvasElement }) => {
+    const timePicker = getTimePicker(canvasElement);
+
+    await waitForTimeValue(timePicker, { hour: 8, minute: 8, second: 8 });
+
+    await waitFor(() => {
+      expect(getTimeText(timePicker, 'hour', 'currentTime').getAttribute('textLength')).toBe('200');
+    });
+  },
+};
+
 export const EventTest: Story = {
   args: {
+    onLoad: fn(),
+    onInit: fn(),
     onChange: fn(),
   },
   play: async ({ canvasElement, args }) => {
