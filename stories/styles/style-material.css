@@ -4,15 +4,15 @@ jb-time-picker.material-style {
     --jb-time-picker-height: 12rem;
     --jb-time-picker-clock-padding: 0.65rem;
     --jb-time-picker-outer-circle-color: var(--jb-primary-container);
-    --jb-time-picker-inner-circle-color: var(--jb-surface);
+    --jb-time-picker-inner-circle-color: var(--jb-surface-primary);
     --jb-time-picker-hour-color: var(--jb-primary);
     --jb-time-picker-minute-color: var(--jb-secondary);
     --jb-time-picker-second-color: var(--jb-error);
-    --jb-time-picker-separator-text-color: var(--jb-text-secondary);
+    --jb-time-picker-separator-text-color: var(--jb-content-secondary);
     --jb-time-picker-indicator-color: var(--jb-outline-variant);
-    --jb-time-picker-prev-text-color: var(--jb-text-secondary);
-    --jb-time-picker-current-text-color: var(--jb-text-primary);
-    --jb-time-picker-next-text-color: var(--jb-text-secondary);
+    --jb-time-picker-prev-text-color: var(--jb-content-secondary);
+    --jb-time-picker-current-text-color: var(--jb-content-primary);
+    --jb-time-picker-next-text-color: var(--jb-content-secondary);
     --jb-time-picker-box-shadow: var(--jb-elevation-1);
 }
 

@@ -4,11 +4,11 @@ jb-time-picker.terminal-style {
     --jb-time-picker-height: 12rem;
     --jb-time-picker-clock-padding: 0.65rem;
     --jb-time-picker-outer-circle-color: #001d12;
-    --jb-time-picker-inner-circle-color: var(--jb-surface);
+    --jb-time-picker-inner-circle-color: var(--jb-surface-primary);
     --jb-time-picker-hour-color: var(--jb-focus-color);
     --jb-time-picker-minute-color: #5eead4;
     --jb-time-picker-second-color: #ff5f56;
-    --jb-time-picker-separator-text-color: var(--jb-text-secondary);
+    --jb-time-picker-separator-text-color: var(--jb-content-secondary);
     --jb-time-picker-indicator-color: var(--jb-border-color);
     --jb-time-picker-prev-text-color: var(--jb-text-disabled);
     --jb-time-picker-current-text-color: var(--jb-focus-color);

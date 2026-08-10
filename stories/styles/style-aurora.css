@@ -4,14 +4,14 @@ jb-time-picker.aurora-style {
     --jb-time-picker-height: 12rem;
     --jb-time-picker-clock-padding: 0.65rem;
     --jb-time-picker-outer-circle-color: #0f172a;
-    --jb-time-picker-inner-circle-color: var(--jb-surface);
+    --jb-time-picker-inner-circle-color: var(--jb-surface-primary);
     --jb-time-picker-hour-color: #7b61ff;
     --jb-time-picker-minute-color: #2dd4bf;
     --jb-time-picker-second-color: #f0abfc;
     --jb-time-picker-separator-text-color: #8fb8d8;
     --jb-time-picker-indicator-color: #37506d;
     --jb-time-picker-prev-text-color: #8fb8d8;
-    --jb-time-picker-current-text-color: var(--jb-text-primary);
+    --jb-time-picker-current-text-color: var(--jb-content-primary);
     --jb-time-picker-next-text-color: #8fb8d8;
     --jb-time-picker-box-shadow: 0 0.65rem 1.5rem rgb(45 212 191 / 0.14);
     --jb-time-picker-clock-filter: drop-shadow(0 0 0.5rem rgb(125 228 211 / 0.16));
