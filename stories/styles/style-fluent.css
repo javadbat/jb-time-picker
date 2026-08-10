@@ -4,7 +4,7 @@ jb-time-picker.fluent-style {
     --jb-time-picker-height: 10rem;
     --jb-time-picker-clock-padding: 0.65rem;
     --jb-time-picker-outer-circle-color: var(--jb-background);
-    --jb-time-picker-inner-circle-color: var(--jb-text-contrast);
+    --jb-time-picker-inner-circle-color: var(--jb-text-inverse);
     --jb-time-picker-hour-color: var(--jb-focus-color);
     --jb-time-picker-minute-color: var(--jb-primary-hover);
     --jb-time-picker-second-color: var(--jb-primary-pressed);
