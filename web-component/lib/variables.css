@@ -14,12 +14,12 @@
   --minute-color: var(--jb-time-picker-minute-color, var(--jb-secondary));
   --second-color: var(--jb-time-picker-second-color, var(--jb-highlight));
   --outer-circle-color: var(--jb-time-picker-outer-circle-color, var(--jb-neutral-9));
-  --inner-circle-color: var(--jb-time-picker-inner-circle-color, var(--jb-white));
+  --inner-circle-color: var(--jb-time-picker-inner-circle-color, var(--jb-surface-primary));
   --separator-text-color: var(--jb-time-picker-separator-text-color, var(--jb-neutral-8));
   --indicator-color: var(--jb-time-picker-indicator-color, var(--jb-neutral-8));
-  --prev-text-color: var(--jb-time-picker-prev-text-color, var(--jb-text-secondary));
-  --current-text-color: var(--jb-time-picker-current-text-color, var(--jb-text-primary));
-  --next-text-color: var(--jb-time-picker-next-text-color, var(--jb-text-secondary));
+  --prev-text-color: var(--jb-time-picker-prev-text-color, var(--jb-content-secondary));
+  --current-text-color: var(--jb-time-picker-current-text-color, var(--jb-content-primary));
+  --next-text-color: var(--jb-time-picker-next-text-color, var(--jb-content-secondary));
 
   /* Other */
   --box-shadow: var(--jb-time-picker-box-shadow, none);
