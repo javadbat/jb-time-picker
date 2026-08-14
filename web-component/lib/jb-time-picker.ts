@@ -154,10 +154,16 @@ export class JBTimePickerWebComponent extends HTMLElement {
   }
   //will show persian number even if user type en number but value will be passed as en number
   #showPersianNumber = i18n.locale.numberingSystem == "arabext";
+  #hasShowPersianNumberOverride = false;
+  #unsubscribeLocaleChange: VoidFunction | null = null;
   get showPersianNumber() {
     return this.#showPersianNumber;
   }
   set showPersianNumber(value: boolean) {
+    this.#hasShowPersianNumberOverride = true;
+    this.#setShowPersianNumber(value);
+  }
+  #setShowPersianNumber(value: boolean) {
     this.#showPersianNumber = Boolean(value);
     this.#initTimeTextNodes();
   }
@@ -180,6 +186,15 @@ export class JBTimePickerWebComponent extends HTMLElement {
     this.#callOnLoadEvent();
     this.#initProp();
     this.#callOnInitEvent();
+    this.#unsubscribeLocaleChange?.();
+    if (!this.#hasShowPersianNumberOverride) this.#setShowPersianNumber(i18n.locale.numberingSystem === "arabext");
+    this.#unsubscribeLocaleChange = i18n.subscribe(() => {
+      if (!this.#hasShowPersianNumberOverride) this.#setShowPersianNumber(i18n.locale.numberingSystem === "arabext");
+    });
+  }
+  disconnectedCallback() {
+    this.#unsubscribeLocaleChange?.();
+    this.#unsubscribeLocaleChange = null;
   }
   #callOnLoadEvent() {
     const event = new CustomEvent("load", { bubbles: true, composed: true });
@@ -636,7 +651,8 @@ export class JBTimePickerWebComponent extends HTMLElement {
         this.optionalUnits = this.#parseOptionalUnits(value);
         break;
       case "show-persian-number":
-        this.showPersianNumber = parseBooleanAttribute(value, false);
+        this.#hasShowPersianNumberOverride = value !== null;
+        this.#setShowPersianNumber(parseBooleanAttribute(value, i18n.locale.numberingSystem === "arabext"));
         break;
       case "text-width":
         this.textWidth = value === null || value === "" || !Number.isFinite(Number(value)) ? null : Number(value);
