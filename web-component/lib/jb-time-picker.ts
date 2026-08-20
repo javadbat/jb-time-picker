@@ -1458,3 +1458,9 @@ export class JBTimePickerWebComponent extends JBBaseComponent {
   }
 }
 defineWebComponent("jb-time-picker", JBTimePickerWebComponent);
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "jb-time-picker": JBTimePickerWebComponent;
+  }
+}
