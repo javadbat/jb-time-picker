@@ -1,8 +1,8 @@
+import { defineWebComponent, JBBaseComponent, enToFaDigits, parseBooleanAttribute } from "jb-core";
 import CSS from "./jb-time-picker.css";
 import VariablesCSS from "./variables.css";
 import { renderHTML } from "./render";
 import type { AnimationHandler, DefaultPositions, GrabbedElement, JBTimeInputElements, JBTimePickerValueObject, TimeUnitsObject, TimeUnitsString, TimeUnits, TimeSteps } from "./types";
-import { enToFaDigits, parseBooleanAttribute } from "jb-core";
 import { registerDefaultVariables } from 'jb-core/theme';
 import { i18n } from 'jb-core/i18n';
 import { dictionary } from "./i18n";
@@ -26,7 +26,7 @@ const ActionTypes = {
   add1: "ADD_1",
   subtract1: "SUB_1",
 };
-export class JBTimePickerWebComponent extends HTMLElement {
+export class JBTimePickerWebComponent extends JBBaseComponent {
   #value: JBTimePickerValueObject = {
     second: 0,
     minute: 0,
@@ -1457,7 +1457,4 @@ export class JBTimePickerWebComponent extends HTMLElement {
     }
   }
 }
-const myElementNotExists = !customElements.get("jb-time-picker");
-if (myElementNotExists) {
-  window.customElements.define("jb-time-picker", JBTimePickerWebComponent);
-}
+defineWebComponent("jb-time-picker", JBTimePickerWebComponent);
